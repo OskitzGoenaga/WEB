@@ -1,10 +1,35 @@
+.filtratu {
+    padding-top: 100px;
+    background-color: #f5f5f7;
+}
+
+.mota {
+    margin-right: 20px;
+    border-radius: 7px;
+    background-color: #f5f5f7;
+    border: 1.4px solid black;
+}
+
+.filtratu > label {
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.filtratu-botoia {
+    background-color: black;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-left: 20px;
+} 
+
 .kutxa-edukia {
     height: 100%;
     display: grid;
     grid-template-columns: repeat(4,1fr);
     justify-items: center;
-    background-color: #f5f5f7;;
-    padding: 100px 0;
+    background-color: #f5f5f7;
 }
 .kutxa-edukia .kutxa {
     height: 420px;

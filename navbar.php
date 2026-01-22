@@ -80,7 +80,7 @@
         </div>
         <form action="produktuak.php" method="get">
             <div class="buscadorea">
-                <input type="text"placeholder="Buscar...">
+                <input type="text"name="bilatzailea"placeholder="Buscar...">
             </div>
         </form>
         <nav class="navbar">
