@@ -1,0 +1,68 @@
+.kutxa-edukia {
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    justify-items: center;
+    background-color: #f5f5f7;;
+    padding: 100px 0;
+}
+.kutxa-edukia .kutxa {
+    height: 420px;
+    width: 320px;
+    text-align: center;
+    margin: 20px;
+    border-radius: 20px;
+    background-color: white;
+    box-shadow: 2px 4px 12px #00000014;
+}
+
+.kutxa:hover {
+    transform: scale(1.01);
+    box-shadow: 0 10px 18px rgba(0,0,0,0.30);
+}
+
+.zatia1 {
+    height: 76%;
+}
+
+.zatia2 {
+    height: 24%;
+}
+
+.kutxa-edukia .kutxa h3 {
+    font-size: 25px;
+    margin: 10px 20px 0px 20px;
+    color: black;
+}
+
+.kutxa-edukia .kutxa img {
+    display: block;
+    height: 200px;
+    width: auto;
+    margin: 8% auto;
+    
+}
+
+.linea2 {
+    border-top: 1px solid black;
+    width: 100%;
+    text-align: center;
+    margin-bottom: -30px;
+}
+
+.erosiBotoia {
+    border-radius: 5px;
+    background-color: black;
+    padding: 5px 20px;
+    color: white;
+    font-weight: bold;
+    margin-top: 58px;
+}
+
+.balioa {
+    color: black;
+    padding: 17px;
+    margin-left: 10px;
+    font-weight: bold;
+    font-size: 20px;
+}
