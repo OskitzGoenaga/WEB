@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Navbarra</title>
     <style>
         * {
             margin: 0;
@@ -61,6 +62,26 @@
             font-size: 120%;
         }
 
+        .saskia i{
+            position: relative;
+            display: block;
+            padding: 25px 20px;
+            color: black;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 25px;
+        }
+        .saskia p{
+            position: absolute;
+            color: white;
+            margin-top: -3.9%;
+            margin-left: 2.3%;
+            background-color: red;
+            border-radius: 20px;
+            padding: 0px 7px;
+            font-weight: bold;
+        }
+
         .navbar img {
             width: 101%;
             height: auto;
@@ -88,8 +109,18 @@
             <a href="kontaktua.php">Kontaktua</a>
             <a href="produktuak.php">Produktuak</a>
             <a href="hornitzaile.php">Hornitzaile Bihurtu</a>
-            <a href="../ingles/webIng.html"><img src="Argazkiak/Bandera_Ingelesa.jpg"></a>
+            <div class="saskia">
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                <p id="zenbakia"><strong>0</strong></p>
+            </div>
         </nav>
     </div>
-</body>
-</html>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+    $(".erosiBotoia").click(function(){
+      var a = parseInt($("#zenbakia").text());
+      a = a + 1;
+      $("#zenbakia").text(a);
+      
+    });
+    </script>
