@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sarrera</title>
+    <link rel="stylesheet" href="navbar.css">
     <link rel="stylesheet" href="sarrera.css">
+    <link rel="stylesheet" href="orokorra.css">
+    <link rel="stylesheet" href="footer.css">
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="slick/slick.css"/>
     <link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
@@ -27,167 +30,83 @@
 </head>
 <body>
     <?php include_once "navbar.php"; ?>
+    <?php include_once "konexioa.php"; ?>
 
+<?php 
+    $kontsulta = "select id, izena, argazkia, prezioa from produktuak limit 8";
+    $stmt = $pdo->query($kontsulta);
+?>
     <section class="berriak">
+    <h1 class="teknologia">Teknologia berriena!</h1>
     <div class="kutxa-edukia slider">
-        <div class="kutxa">
-        <div class="zatia1">
-            <h3>Iphone 14 Pro</h3>
-            <div class="erdian">
-            <img src="Argazkiak/iphone14pro.jpg">
-            </div>
-            <ul>
-                <li><b>POZESADOREA:</b>Apple A16 Bionic chip</li>
-                <li><b>RAM:</b> 6 GB</li>
-                <li><b>SSD:</b>128/256/512 GB</li>
-                <li><b>PANTAILA:</b> 6.1" Super Retina XDR </li>
-                <li><b>SISTEMA:</b> iOS 18</li>
-            </ul>
-        </div>
-        <div class="linea2"></div>
-        <div class="zatia2">
-            <input type="submit" name="erosi" class="erosiBotoia" value="EROSI"></input>
-            <span class="balioa">599.99€</span><br><br>
-            <div class="stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-            </div>
-        </div>
-        </div>
-        <div class="kutxa">
-        <div class="zatia1">
-            <h3>Acer Aspire 5 A515</h3>
-            <div class="erdian">
-            <img src="Argazkiak/AcerAspire5.jpg">
-            </div>
-            <ul>
-                <li><b>POZESADOREA:</b> Intel Core i5-8250U</li>
-                <li><b>RAM:</b> 8 GB DDR4</li>
-                <li><b>SSD:</b> 256 GB</li>
-                <li><b>PANTAILA:</b> 15.6" Full HD  anti-isladagarria</li>
-                <li><b>SISTEMA:</b> Windows 11 Pro</li>
-            </ul>
-        </div>
-        <div class="linea2"></div>
-        <div class="zatia2">
-            <input type="submit" name="erosi" class="erosiBotoia" value="EROSI"></input>
-            <span class="balioa">399.99€</span><br><br>
-            <div class="stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-            </div>
-        </div>
-        </div>
-        <div class="kutxa">
-        <div class="zatia1">
-            <h3>Apple iPad 10.2</h3>
-            <div class="erdian">
-            <img src="Argazkiak/AppleiPad10.2.jpg">
-            </div>
-            <ul>
-                <li><b>POZESADOREA:</b> Apple A13 Bionic</li>
-                <li><b>RAM:</b> 3 GB</li>
-                <li><b>SSD:</b> 64 GB</li>
-                <li><b>PANTAILA:</b> 10.2" Retina </li>
-                <li><b>SISTEMA:</b> iPadOS 18</li>
-            </ul>
-        </div>
-        <div class="linea2"></div>
-        <div class="zatia2">
-            <input type="submit" name="erosi" class="erosiBotoia" value="EROSI"></input>
-            <span class="balioa">249.99€</span><br><br>
-            <div class="stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-            </div>
-        </div>
-        </div>
-        <div class="kutxa">
-            <div class="zatia1">
-            <h3>Samsung Galaxy Tab S9</h3>
-            <div class="erdian">
-                <img src="Argazkiak/Samsung%20Galaxy%20Tab%20S9.jpg">
-            </div>
-            <ul>
-                <li><b>POZESADOREA:</b> Snapdragon 8 Gen 2</li>
-                <li><b>RAM:</b> 8/12 GB</li>
-                <li><b>SSD:</b> 128/256 GB</li>
-                <li><b>PANTAILA:</b> 11" Dynamic AMOLED 2X </li>
-                <li><b>SISTEMA:</b> Android 14</li>
-            </ul>
-            </div>
-            <div class="linea2"></div>
-            <div class="zatia2">
-                <input type="submit" name="erosi" class="erosiBotoia" value="EROSI"></input>
-                <span class="balioa">349.99€</span><br><br>
-                <div class="stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                </div>
-            </div>
-        </div>
-        <div class="kutxa">
-            <div class="zatia1">
-            <h3>Google Pixel 8 Pro</h3>
-            <div class="erdian">
-                <img src="Argazkiak/Google%20Pixel%208%20Pro.jpg">
-            </div>
+         <?php while ($produktua = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
+                <form action="saskia.php" method="POST">
+                    <div class="kutxa">
+                        <div class="zatia1">
+                            <h3><?= $produktua["izena"]; ?></h3>
+                            <div class="erdian">
+                                <?php $linka = 'Argazkiak/' . $produktua['argazkia']; ?>
+                                <img src="<?= $linka ?>" alt="">
+                            </div>
+                        </div>
+                        <div class="lineaKutxak"></div>
+                        <div class="zatia2">
+                            <input type="hidden" name="id" value="<?= $produktua['id'] ?>">
+                            <input type="submit" name="erosi" class="erosiBotoia" value="EROSI"></input>
+                            <span class="balioa"><?= $produktua["prezioa"] . " €"; ?></span>
 
-            <ul>
-                <li><b>POZESADOREA:</b> Google Tensor G3</li>
-                <li><b>RAM:</b> 12 GB</li>
-                <li><b>SSD:</b> 128/256/512 GB</li>
-                <li><b>PANTAILA:</b> 6.7" LTPO OLED </li>
-                <li><b>SISTEMA:</b> Android 15</li>
-            </ul>
-            </div>
-            <div class="linea2"></div>
-            <div class="zatia2">
-                <input type="submit" name="erosi" class="erosiBotoia" value="EROSI"></input>
-                <span class="balioa">499.99€</span><br><br>
-                <div class="stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                </div>
-            </div>
-        </div>
-        <div class="kutxa">
-            <div class="zatia1">
-            <h3>Apple MacBook Air</h3>
-            <div class="erdian">
-                <img src="Argazkiak/Apple%20Macbook%20Air.jpg">
-            </div>
-            <ul>
-                <li><b>POZESADOREA:</b> Apple M3 chip</li>
-                <li><b>RAM:</b> 16 GB</li>
-                <li><b>SSD:</b> 512 GB</li>
-                <li><b>PANTAILA:</b> 13.6" Liquid Retina </li>
-                <li><b>SISTEMA:</b> macOS Sequoia</li>
-            </ul>
-            </div>
-            <div class="linea2"></div>
-            <div class="zatia2">
-                <input type="submit" name="erosi" class="erosiBotoia" value="EROSI"></input>
-                <span class="balioa">699.99€</span><br><br>
-                <div class="stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                </div>
-            </div>
-        </div>
+                        </div>
+                    </div>
+                </form>
+            <?php endwhile; ?>
     </div>
     </section>
+     <section class="prezioa">
+        <article>
+      <img src="../WEB/Argazkiak/argazkia.jpg" />
+      <div class="jasangarritasuna">
+      <h2>Prezioak jasangarriak, etorkizun berriak.</h2>
+        <p>
+        Rebizi-n <strong>9, 11, 12 eta 13. GJHen</strong> alde egiten dugu:  
+        teknologia berriztuz, <strong>aurreztu</strong> eta <strong>planeta babesten duzu</strong>!  
+        Gailuak kalitatezkoak, <strong>prezio justuetan</strong> eta <strong>bigarren bizitza batekin</strong>.  
+        <i>— Zuk aukeratu, guk berriztuko dugu. Munduak eskertuko du!</i>
+        </p>
+      </div>
+      </article>
+         </section>
+      <section class="gu" id="norgara">
+    <h2 class="title1">Nor gara Rebizi-n?</h2>
+    <p>
+      Pasioz beteriko talde bat gara, teknologia eta jasangarritasuna uztartzen dituena. Gure helburua zure gailuak
+      berrerabiltzea da, ingurumena zainduz eta aurrezpena eskainiz.
+    </p>
+    <div class="kutxa-edukia2">
+      <div class="kutxa">
+        <h3>OIER MAIZA UGARTEMENDIA</h3>
+        <p>
+          Antolatzailea, proiektu hau aurrera eramatera ahalbidetu duen pertsona.
+        </p>
+      </div>
 
+      <div class="kutxa">
+        <h3>ANDER ORMAZABAL GARCIANDIA</h3>
+        <p>
+          Taldearen burbuina, denak funtzionatzearen arduraduna.
+        </p>
+
+      </div>
+
+      <div class="kutxa">
+        <h3>OSKITZ GOENAGA URRETABIZKAIA</h3>
+        <p>
+          Gure programatzaile aditua, webaren sortzailea.
+        </p>
+      </div>
+    </div>
+  </section>
+  
+     <?php include_once "footer.php"; ?>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-migrate-3.6.0.js" integrity="sha256-K+9TyQ575NpZ999iNVvO9DXK2mBqL7jOryAz2FuQpcs=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="slick/slick.min.js"></script>

@@ -1,0 +1,79 @@
+.kontaktua {
+    padding: 50px 0;
+    background: #f5f5f7;
+    height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.oina {
+    display: flex;
+
+}
+
+.oina>div>iframe {
+    display: block;
+    text-align: left;
+    width: 400px;
+    height: 250px;
+    margin-left: 100px;
+}
+
+.o-enlazeak {
+    display: flex;
+    flex-direction: column;
+    margin: 0 150px;
+    align-items: center;
+    text-align: center;
+}
+
+.sareak img {
+    padding: 30px;
+    width: 50px;
+    height: auto;
+
+}
+.helbideak h2{
+    color: rgb(0, 0, 0);
+    font-size: 30px;
+}
+.helbideak h4 {
+    text-align: center;
+    color: rgb(0, 0, 0);
+}
+
+.bukaera {
+    color: rgb(0, 0, 0);
+    background-color: #f5f5f7;
+}
+
+.eskubideak {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.eskubideak>p{
+    display: block;
+    font-size: 15px;
+    padding: 30px;
+}
+
+.eskubideak img {
+    width: 100px;
+    height: 50px;
+    margin: 10px;
+    border-radius: 5px;
+    box-shadow: 0 5px 10px rgba(176, 176, 176, 0.733);
+}
+
+.linea {
+    border-top: 2px solid rgb(0, 0, 0);
+    margin: auto;
+    width: 80%;
+}
+
+.ordainketak>p{
+   font-size: 15px;   
+}
