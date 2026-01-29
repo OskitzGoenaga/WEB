@@ -27,7 +27,7 @@ if (!isset($_SESSION['bezero_id'])) {
 
         .saskia2 {
             background-color: white;
-            margin: 160px 400px;
+            margin: 160px 250px;
             padding: 30px;
         }
 

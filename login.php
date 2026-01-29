@@ -11,12 +11,17 @@ require 'konexioa.php'; // tu conexión a la base de datos
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saioa hasi</title>
     <link rel="stylesheet" href="orokorra.css" />
-<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
         body {
             background-color: #f5f5f7;
         }
 
+        #testua{
+            color: #444;
+            padding-bottom:30px;
+        }
+        
         .formularioa {
             text-align: center;
             width: 50%;
@@ -52,6 +57,7 @@ require 'konexioa.php'; // tu conexión a la base de datos
     <div class="formularioa">
 
         <h1 >HASI SAIOA</h1><br>
+        <p id="testua">Saskia ikusteko edo arazoak bidaltzeko hasi saioa!</p>
         <form action="login.php" method="POST">
             <label>Izena:</label><br>
             <input type="text" name="izena" required><br><br>
@@ -92,7 +98,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['bezero_id'] = $bezeroa['id'];
         $_SESSION['bezero_izena'] = $bezeroa['izena'];
 
-        header("Location: saskia.php");
+        header("Location: sarrera.php");
+        
         exit();
     } else { ?>
       <script> < src="https://code.jquery.com/jquery-4.0.0.js" integrity="sha256-9fsHeVnKBvqh3FB2HYu7g2xseAZ5MlN6Kz/qnkASV8U=" crossorigin="anonymous"></script>  
