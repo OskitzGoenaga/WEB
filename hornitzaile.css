@@ -32,12 +32,23 @@
     font-size: 16px;
     margin-bottom: 8px;
 }
-.izenburuak>input{
+.izenburuak>input {
     border: 2px solid black;
     border-radius: 3px;
     padding: 5px;
     width: 100%;
+    max-width: 100%;
+    min-width: 100%;
 }
+.izenburuak>textarea {
+    border: 2px solid black;
+    border-radius: 3px;
+    padding: 5px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+}
+
 .bidali {
     color: white;
     margin-top: 20px;

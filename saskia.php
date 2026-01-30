@@ -27,7 +27,8 @@ if (!isset($_SESSION['bezero_id'])) {
 
         .saskia2 {
             background-color: white;
-            margin: 160px 250px;
+            width:70%;
+            margin: 160px auto;
             padding: 30px;
         }
 
@@ -43,6 +44,7 @@ if (!isset($_SESSION['bezero_id'])) {
         <h1>Erosketa saskia</h1>
         <p>Kaixo, <?php echo $_SESSION['bezero_izena']; ?>. Hemen dago zure saskia.</p>
     </div>
+    
 </body>
 
 </html>
