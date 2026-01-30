@@ -3,8 +3,8 @@ include_once "konexioa.php";
 session_start();
 
 
-if (!isset($_SESSION['bezero_id'])) {
-    header("Location: login.php");
+if (!isset($_SESSION['id'])) {
+    header("Location: hasiSaioa.php");
     exit();
 }
 ?>
@@ -27,7 +27,8 @@ if (!isset($_SESSION['bezero_id'])) {
 
         .saskia2 {
             background-color: white;
-            margin: 160px 400px;
+            width:70%;
+            margin: 160px auto;
             padding: 30px;
         }
 
@@ -41,8 +42,9 @@ if (!isset($_SESSION['bezero_id'])) {
     <?php include_once "navbar.php"; ?>
     <div class="saskia2">
         <h1>Erosketa saskia</h1>
-        <p>Kaixo, <?php echo $_SESSION['bezero_izena']; ?>. Hemen dago zure saskia.</p>
+        <p>Kaixo, <?php echo $_SESSION['izena']; ?>. Hemen dago zure saskia.</p>
     </div>
+    
 </body>
 
 </html>

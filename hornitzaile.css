@@ -1,0 +1,59 @@
+.galdetegia {
+    padding-top: 100px;
+}
+
+.taula {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 40px;
+    background-color: rgb(255, 255, 255);  
+    color: rgb(0, 0, 0);           
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(176, 176, 176, 0.733);
+}
+
+.taula h2 {
+    font-size: 36px;
+    color: #000000;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.taula p {
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: #444;
+}
+.izenburuak {
+    text-align: left;
+    margin: 15px 0;
+}
+.izenburuak label {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+.izenburuak>input {
+    border: 2px solid black;
+    border-radius: 3px;
+    padding: 5px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+}
+.izenburuak>textarea {
+    border: 2px solid black;
+    border-radius: 3px;
+    padding: 5px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+}
+
+.bidali {
+    color: white;
+    margin-top: 20px;
+    padding: 10px 25px;
+    background: #000000;
+    font-size: 18px;
+    border-radius: 8px;
+}

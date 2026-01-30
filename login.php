@@ -11,16 +11,21 @@ require 'konexioa.php'; // tu conexión a la base de datos
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saioa hasi</title>
     <link rel="stylesheet" href="orokorra.css" />
-<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
         body {
             background-color: #f5f5f7;
         }
 
+        #testua{
+            color: #444;
+            padding:0px 50px 30px;
+        }
+        
         .formularioa {
             text-align: center;
-            width: 50%;
-            margin: 130px 400px;
+            width: 30%;
+            margin: 120px auto;
             background-color: white;
             box-shadow: 0 10px 18px rgba(0, 0, 0, 0.30);
             padding: 50px 0px;
@@ -44,14 +49,13 @@ require 'konexioa.php'; // tu conexión a la base de datos
             border-radius: 5px;
         }
     </style>
-    <link rel="stylesheet" href="navbar.css" />
 </head>
 
 <body>
-    <?php include_once "navbar.php"; ?>
     <div class="formularioa">
 
-        <h1 >HASI SAIOA</h1><br>
+        <h1 >SORTU KONTUA</h1><br>
+        <p id="testua">Saskia ikusteko edo arazoak bidaltzeko kontu bat sortu behar duzu!</p>
         <form action="login.php" method="POST">
             <label>Izena:</label><br>
             <input type="text" name="izena" required><br><br>
@@ -62,41 +66,63 @@ require 'konexioa.php'; // tu conexión a la base de datos
             <label>Email:</label><br>
             <input type="email" name="email" required><br><br>
 
+            <label>Pasahitza:</label><br>
+            <input type="pasahitza" name="pasahitza" required><br><br>
+
             <label>Telefonoa:</label><br>
             <input type="text" name="telefonoa" required><br><br>
 
             <label>Helbidea:</label><br>
             <input type="text" name="helbidea" required><br><br>
 
-            <button type="submit" id="saioaBtn">SAIOA HASI</button>
+            <button type="submit" name="bidali" id="saioaBtn">ERREGISTRATU</button>
         </form>
+        <a href="hasiSaioa.php">Jadanik kontua duzu?</a>
     </div>
+     
 </body>
 
 </html>
-
 <?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+ if (
+        $_SERVER["REQUEST_METHOD"] === "POST" &&
+        isset($_POST['bidali'], $_POST['izena'], $_POST['abizena'], $_POST['email'], $_POST['pasahitza'], $_POST['telefonoa'], $_POST['helbidea'])
+    ) {
+        $bezeroak = "INSERT INTO bezeroak (id, izena, abizena, email, pasahitza, telefonoa, helbidea) VALUES (null, :iz, :ab, :em, :pas, :tel, :hel)";
+        $stmt = $pdo->prepare($bezeroak);
 
-    $email = $_POST['email'];
-    $telefonoa = $_POST['telefonoa'];
+        $stmt->execute([
+            ':iz' => $_POST["izena"],
+            ':ab' => $_POST["abizena"],
+            ':em' => $_POST["email"],
+            ':pas' => $_POST["pasahitza"],
+            ':tel' => $_POST["telefonoa"],
+            ':hel' => $_POST["helbidea"]
+        ]);
 
     // Consulta básica
-    $sql = "SELECT * FROM bezeroak WHERE email = '$email' AND telefonoa = '$telefonoa'";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    $bezeroa = $stmt->fetch(PDO::FETCH_ASSOC);
+    $sql = "SELECT * FROM bezeroak WHERE email = $_POST["email"] AND pasahitza = $_POST["pasahitza"]";
+    $stmtt = $pdo->prepare($sql);
+    $stmtt->execute();
+    $bezeroak = $stmtt->fetch(PDO::FETCH_ASSOC);
 
-    if ($bezeroa) {
+    if ($bezeroak) {
         // Saioan gorde
-        $_SESSION['bezero_id'] = $bezeroa['id'];
-        $_SESSION['bezero_izena'] = $bezeroa['izena'];
+        $_SESSION['id'] = $bezeroak['id'];
+        $_SESSION['izena'] = $bezeroak['izena'];
 
-        header("Location: saskia.php");
+        header("Location: sarrera.php");
+        
         exit();
-    } else { ?>
-      <script> < src="https://code.jquery.com/jquery-4.0.0.js" integrity="sha256-9fsHeVnKBvqh3FB2HYu7g2xseAZ5MlN6Kz/qnkASV8U=" crossorigin="anonymous"></script>  
-      <script>alert("Datu okerrak");</script>
-    <?php }
-}
-?>
+        ?>
+        <?php
+        }
+    }
+    ?>
+    <?php if (isset($_GET['ok'])): ?>
+        <script src="https://code.jquery.com/jquery-4.0.0.js"
+            integrity="sha256-9fsHeVnKBvqh3FB2HYu7g2xseAZ5MlN6Kz/qnkASV8U=" crossorigin="anonymous"></script>
+        <script>
+            alert("Erregistratu zara!");
+        </script>
+    <?php endif; ?>

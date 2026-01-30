@@ -1,7 +1,7 @@
 <?php
 
 // db.php
-$host = "192.168.115.163"; 
+$host = "192.168.115.163"; //
 $dbname = "db_erronka2";
 $user = "kudeatzailea";
 $pass = "1MG3_2025"; // XAMPP: sarri hutsik
