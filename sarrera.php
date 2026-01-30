@@ -36,7 +36,7 @@
     $kontsulta = "select id, izena, argazkia, prezioa from produktuak limit 8";
     $stmt = $pdo->query($kontsulta);
 ?>
-    <section class="berriak">
+    <section id="berriak" class="berriak">
     <h1 class="teknologia">Teknologia berriena!</h1>
     <div class="kutxa-edukia slider">
          <?php while ($produktua = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
@@ -61,7 +61,7 @@
             <?php endwhile; ?>
     </div>
     </section>
-     <section class="prezioa">
+    <section id="prezioa" class="prezioa">
         <article>
       <img src="../WEB/Argazkiak/argazkia.jpg" />
       <div class="jasangarritasuna">
