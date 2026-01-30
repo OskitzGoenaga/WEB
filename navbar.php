@@ -1,4 +1,17 @@
+<div id="ME" class="menu-edukia">
+    <div class="menu-barrua">
+        <ul class="menu-lista">
+            <li><a href="sarrera.php#berriak">Berriak</a></li>
+            <li><a href="sarrera.php#prezioa">Prezioa</a></li>
+            <li><a href="sarrera.php#norgara">Nor gara</a></li>
+            <li><a href="kontaktua.php">Kontaktua</a></li>
+        </ul>
+    </div>
+</div>
 <div class="head">
+    <div class="menu-desplegablea">
+        <img src="Argazkiak/Menu_desplegablea.jpg">
+    </div>
     <div class="logo">
         <a href="sarrera.php"><img src="Argazkiak/logoa.jpg"></a>
     </div>
@@ -29,4 +42,12 @@
     $(".saskia>i").click(function () {
         window.location.href = "saskia.php"; 
     })
+
+    $(".menu-desplegablea img").click(function () {
+        $("#ME").removeClass("menu-edukia").addClass("menu-edukia2");
+        return false;
+    });
+    $(document).click(function () {
+        $("#ME").removeClass("menu-edukia2").addClass("menu-edukia");
+    });
 </script>
