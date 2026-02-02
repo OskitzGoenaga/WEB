@@ -2,7 +2,7 @@
     <div class="menu-barrua">
         <ul class="menu-lista">
             <li><a href="sarrera.php#berriak">Berriak</a></li>
-            <li><a href="sarrera.php#prezioa">Prezioa</a></li>
+            <li><a href="sarrera.php#prezioa">Jasangarritasuna</a></li>
             <li><a href="sarrera.php#norgara">Nor gara</a></li>
             <li><a href="kontaktua.php">Kontaktua</a></li>
         </ul>

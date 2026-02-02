@@ -67,7 +67,7 @@ require 'konexioa.php'; // tu conexión a la base de datos
             <input type="email" name="email" required><br><br>
 
             <label>Pasahitza:</label><br>
-            <input type="pasahitza" name="pasahitza" required><br><br>
+            <input type="password" name="pasahitza" required><br><br>
 
             <label>Telefonoa:</label><br>
             <input type="text" name="telefonoa" required><br><br>
@@ -79,12 +79,11 @@ require 'konexioa.php'; // tu conexión a la base de datos
         </form>
         <a href="hasiSaioa.php">Jadanik kontua duzu?</a>
     </div>
-     
 </body>
 
 </html>
 <?php
- if (
+    if (
         $_SERVER["REQUEST_METHOD"] === "POST" &&
         isset($_POST['bidali'], $_POST['izena'], $_POST['abizena'], $_POST['email'], $_POST['pasahitza'], $_POST['telefonoa'], $_POST['helbidea'])
     ) {
@@ -100,22 +99,22 @@ require 'konexioa.php'; // tu conexión a la base de datos
             ':hel' => $_POST["helbidea"]
         ]);
 
-    // Consulta básica
-    $sql = "SELECT * FROM bezeroak WHERE email = $_POST["email"] AND pasahitza = $_POST["pasahitza"]";
-    $stmtt = $pdo->prepare($sql);
-    $stmtt->execute();
-    $bezeroak = $stmtt->fetch(PDO::FETCH_ASSOC);
+        // Consulta básica con prepared statements
+        $sql = "SELECT * FROM bezeroak WHERE email = :em AND pasahitza = :pas";
+        $stmtt = $pdo->prepare($sql);
+        $stmtt->execute([
+            ':em' => $_POST["email"],
+            ':pas' => $_POST["pasahitza"]
+        ]);
+        $bezeroa = $stmtt->fetch(PDO::FETCH_ASSOC);
 
-    if ($bezeroak) {
-        // Saioan gorde
-        $_SESSION['id'] = $bezeroak['id'];
-        $_SESSION['izena'] = $bezeroak['izena'];
+        if ($bezeroa) {
+            // Saioan gorde
+            $_SESSION['id'] = $bezeroa['id'];
+            $_SESSION['izena'] = $bezeroa['izena'];
 
-        header("Location: sarrera.php");
-        
-        exit();
-        ?>
-        <?php
+            header("Location: sarrera.php?ok=1");
+            exit();
         }
     }
     ?>

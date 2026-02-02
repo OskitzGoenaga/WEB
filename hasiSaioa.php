@@ -78,10 +78,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $pasahitza = $_POST['pasahitza'];
 
-    // Consulta básica
-    $sql = "SELECT * FROM bezeroak WHERE email = '$email' AND pasahitza = '$pasahitza'";
+    // Consulta con prepared statements
+    $sql = "SELECT * FROM bezeroak WHERE email = :email AND pasahitza = :pasahitza";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute();
+    $stmt->execute([
+        ':email' => $email,
+        ':pasahitza' => $pasahitza
+    ]);
     $bezeroa = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($bezeroa) {
@@ -90,15 +93,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['izena'] = $bezeroa['izena'];
 
         header("Location: sarrera.php");
-        
         exit();
-        ?>
-        <script src="https://code.jquery.com/jquery-4.0.0.js" integrity="sha256-9fsHeVnKBvqh3FB2HYu7g2xseAZ5MlN6Kz/qnkASV8U=" crossorigin="anonymous"></script> 
-        <script>alert("Saioa hasi duzu!");</script>
-      <?php
-}
     } else { ?>
-      <script src="https://code.jquery.com/jquery-4.0.0.js" integrity="sha256-9fsHeVnKBvqh3FB2HYu7g2xseAZ5MlN6Kz/qnkASV8U=" crossorigin="anonymous"></script> 
-      <script>alert("Datu okerrak");</script>
+        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script> 
+        <script>alert("Datu okerrak");</script>
     <?php }
+}
 ?>
