@@ -29,18 +29,18 @@
     </style>
 </head>
 <body>
-    <?php include_once "navbar.php"; ?>
     <?php include_once "konexioa.php"; ?>
+    <?php include_once "navbar.php"; ?>
 
 <?php 
-    $kontsulta = "select id, izena, argazkia, prezioa from produktuak limit 8";
+    $kontsulta = "select * from produktuak limit 8";
     $stmt = $pdo->query($kontsulta);
 ?>
     <section id="berriak" class="berriak">
     <h1 class="teknologia">Teknologia berriena!</h1>
     <div class="kutxa-edukia slider">
          <?php while ($produktua = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
-                <form action="saskia.php" method="POST">
+                <form action="gehituSaskira.php" method="POST">
                     <div class="kutxa">
                         <div class="zatia1">
                             <h3><?= $produktua["izena"]; ?></h3>
@@ -52,7 +52,9 @@
                         <div class="lineaKutxak"></div>
                         <div class="zatia2">
                             <input type="hidden" name="id" value="<?= $produktua['id'] ?>">
-                            <input type="submit" name="erosi" class="erosiBotoia" value="EROSI"></input>
+                            <button type="submit" class="erosiBotoia" name="produktuak_id" value="<?= (int)$produktua['id'] ?>">
+                                SASKIRATU
+                            </button>
                             <span class="balioa"><?= $produktua["prezioa"] . " €"; ?></span>
 
                         </div>
@@ -112,11 +114,6 @@
     <script type="text/javascript" src="slick/slick.min.js"></script>
 
     <script>
-    $(".erosiBotoia").click(function(){
-        var a = parseInt($("#zenbakia").text());
-        a = a + 1;
-        $("#zenbakia").text(a);
-    });
     $(document).ready(function(){
         $('.slider').slick({
         slidesToShow: 3,
