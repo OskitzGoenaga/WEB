@@ -20,11 +20,7 @@ if (!isset($_SESSION['id'])) {
     <link rel="stylesheet" href="navbar.css" />
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
-        body {
-            text-align: center;
-            background-color: #f5f5f7;
-        }
-
+        
         .saskia2 {
             background-color: white;
             width:70%;
