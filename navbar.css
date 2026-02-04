@@ -14,7 +14,7 @@
   margin-left: 50px;
   max-width: 100%;
   height: auto;
-  width: 55px;
+  width: 50px;
   cursor: pointer;
 }
 
@@ -76,15 +76,6 @@
   font-size: 120%;
 }
 
-/* Decoration: header, close button, hover and separators */
-.menu-header{
-  display:flex;
-  justify-content:flex-end;
-  align-items:center;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #eee;
-}
-
 .menu-lista li{
   border-bottom: 1px solid #f0f0f0;
 }
@@ -107,7 +98,7 @@
 .logo img {
   max-width: 100%;
   height: auto;
-  width: 160px;
+  width: 130px;
 }
 .buscadorea {
   position: relative;
@@ -118,7 +109,7 @@
   padding: 12px 20px 12px 20px;
   border-radius: 30px;
   border: 2px solid black;
-  background-color: #fff;
+  background-color: white;
 }
 
 .navbar {

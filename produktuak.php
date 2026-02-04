@@ -14,8 +14,8 @@
 
 <body>
     <?php
-    include_once "navbar.php";
     include_once "konexioa.php";
+    include_once "navbar.php";
     ?>
 
     <form class="filtratu" action="produktuak.php" method="get">
@@ -48,7 +48,7 @@
     <section class="edukia">
         <div class="kutxa-edukia">
             <?php while ($produktua = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
-                <form action="saskia.php" method="POST">
+                <form action="gehituSaskira.php" method="POST">
                     <div class="kutxa">
                         <div class="zatia1">
                             <h3><?= $produktua["izena"]; ?></h3>
@@ -60,7 +60,9 @@
                         <div class="linea2"></div>
                         <div class="zatia2">
                             <input type="hidden" name="id" value="<?= $produktua['id'] ?>">
-                            <input type="submit" name="erosi" class="erosiBotoia" value="EROSI"></input>
+                            <button type="submit" class="erosiBotoia" name="produktuak_id" value="<?= (int)$produktua['id'] ?>">
+                                SASKIRATU
+                            </button>
                             <span class="balioa"><?= $produktua["prezioa"] . " €"; ?></span>
                         </div>
                     </div>
@@ -69,14 +71,6 @@
         </div>
     </section>
     <?php include_once "footer.php"; ?>
-    <script>
-        $(".erosiBotoia").click(function () {
-            var a = parseInt($("#zenbakia").text());
-            a = a + 1;
-            $("#zenbakia").text(a);
-        });
-
-    </script>
 </body>
 
 </html>

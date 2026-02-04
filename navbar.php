@@ -8,6 +8,21 @@
         </ul>
     </div>
 </div>
+<?php
+session_start();
+include_once "konexioa.php";
+
+$zenb = 0;
+
+if (isset($_SESSION['id'])) {
+    $stmt = $pdo->prepare("
+        SELECT COUNT(kantitatea) AS kant FROM saskia WHERE bezeroa_id = :id
+    ");
+    $stmt->execute([":id" => $_SESSION["id"]]);
+    $r = $stmt->fetch(PDO::FETCH_ASSOC);
+    $zenb = $r["kant"] ?? 0;
+}
+?>
 <div class="head">
     <div class="menu-desplegablea">
         <img src="Argazkiak/Menu_desplegablea.jpg">
@@ -27,22 +42,18 @@
         <a href="hornitzaile.php">Hornitzaile Bihurtu</a>
         <div class="saskia">
             <i class="fa fa-shopping-cart" aria-hidden="true" ></i>
-            <p id="zenbakia"><strong>0</strong></p>
+            <p id="zenbakia"><strong><?= $zenb;?></strong></p>
         </div>
     </nav>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script>
-    $(".erosiBotoia").click(function () {
-        var a = parseInt($("#zenbakia").text());
-        a = a + 1;
-        $("#zenbakia").text(a);
-    });
-    $(".saskia>i").click(function () {
-        window.location.href = "saskia.php"; 
-    })
 
+    $(".saskia i").click(function () {
+        window.location.href = "saskia.php"; 
+    });
     $(".menu-desplegablea img").click(function () {
         $("#ME").removeClass("menu-edukia").addClass("menu-edukia2");
         return false;
