@@ -3,6 +3,14 @@
     background-color: #f5f5f7;
 }
 
+.bilatzailea {
+    margin-left: 20px;
+    padding: 5px 10px;
+    border-radius: 7px;
+    border: 1.4px solid black;
+    margin-right: 20px;
+}
+
 .mota {
     margin-right: 20px;
     border-radius: 7px;
