@@ -13,16 +13,43 @@ if (!$produktuaId) {
     die("Errorea: Produktua ez da balioduna.");
 }
 
-$stmt = $pdo->prepare("
-    INSERT INTO saskia (kantitatea, data, bezeroa_id, produktua_id, salmenta_id)
-    VALUES (1, CURRENT_DATE, :bezeroa, :produktua, NULL)
-");
+$bezeroa = $_SESSION["id"];
 
+
+$stmt = $pdo->prepare("
+    SELECT * FROM saskia 
+    WHERE produktua_id = :produktua AND bezeroa_id = :bezeroa
+");
 $stmt->execute([
-    ":bezeroa"   => $_SESSION["id"],
-    ":produktua" => $produktuaId    
+    "produktua" => $produktuaId,
+    "bezeroa"   => $bezeroa
 ]);
 
 
-header("Location: saskia.php");
+if ($stmt->rowCount() > 0) {
+
+    $stmt = $pdo->prepare("
+        UPDATE saskia 
+        SET kantitatea = kantitatea + 1
+        WHERE produktua_id = :produktua AND bezeroa_id = :bezeroa
+    ");
+    $stmt->execute([
+        "produktua" => $produktuaId,
+        "bezeroa"   => $bezeroa
+    ]);
+
+} else {
+
+
+    $stmt = $pdo->prepare("
+        INSERT INTO saskia (kantitatea, data, bezeroa_id, produktua_id, salmenta_id)
+        VALUES (1, CURRENT_DATE, :bezeroa, :produktua, NULL)
+    ");
+    $stmt->execute([
+        "bezeroa"   => $bezeroa,
+        "produktua" => $produktuaId
+    ]);
+}
+
+header("Location: produktuak.php");
 exit();
