@@ -16,7 +16,7 @@ $zenb = 0;
 
 if (isset($_SESSION['id'])) {
     $stmt = $pdo->prepare("
-        SELECT COUNT(kantitatea) AS kant FROM saskia WHERE bezeroa_id = :id
+        SELECT COUNT(kantitatea) AS kant FROM saskiak WHERE bezeroa_id = :id
     ");
     $stmt->execute([":id" => $_SESSION["id"]]);
     $r = $stmt->fetch(PDO::FETCH_ASSOC);
