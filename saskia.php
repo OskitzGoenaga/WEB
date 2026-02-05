@@ -57,8 +57,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["produktuak_id"])) {
 $stmt = $pdo->prepare("
     SELECT p.id, p.izena, p.prezioa, s.kantitatea, p.argazkia
     FROM saskia s
-    JOIN produktuak p ON s.produktua_id = p.id
-    WHERE s.bezeroa_id = :id
+    INNER JOIN produktuak p ON s.produktua_id = p.id
+    INNER JOIN salmentak sa ON s.salmenta_id = sa.id
+    WHERE s.bezeroa_id = :id and sa.id is null
 ");
 $stmt->execute([":id" => $_SESSION["id"]]);
 $produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -68,7 +69,7 @@ $produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="eu">
 <head>
     <meta charset="UTF-8">
-    <title>Erosketa Saskia</title>
+    <title>Saskia</title>
     <link rel="stylesheet" href="navbar.css">
     <link rel="stylesheet" href="orokorra.css">
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
@@ -171,6 +172,15 @@ $produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
             text-align: center;
             padding: 5px;
         }   
+        #erosketaBtn{
+            border-radius: 5px;
+            background-color: black;
+            padding: 5px 20px;
+            color: white;
+            font-weight: bold;
+            margin: 20px;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -201,36 +211,33 @@ $produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             value="<?= $p["id"] ?>"><i class="fas fa-trash-alt"></i></button>
                 </div>
             <?php endforeach; ?>
-
         </form>
     </div>
 
 
     <div class="ordainketa">
-        <h1>Erosketa</h1>
+        <h1>Ordainketa</h1>
 
         <div class="erosketaPrezioa">
             <?php
             $i = 1;
             $preziototala = 0;
             ?>
-
+        <form action="erosketa.php" method="post">
             <?php foreach ($produktua as $p): ?>
                 <?php $prezioKant = $p["prezioa"] * $p["kantitatea"]; ?>
-
                 <div class="item2">
                     <p>Produktua-<?= $i ?></p>
                     <p class="tamaina"><?= $prezioKant ?> €</p>
                 </div>
-
                 <?php
                 $preziototala += $prezioKant;
                 $i++;
                 ?>
             <?php endforeach; ?>
-
             <p id="prezTot">TOTALA: <?= $preziototala ?> €</p>
-            <button type="button">EROSI</button>
+            <button id="erosketaBtn" type="submit">EROSI</button>
+        </form>
         </div>
     </div>
 </div>
