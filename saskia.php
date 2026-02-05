@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 include_once "konexioa.php";
 include_once "navbar.php";
 
@@ -84,6 +84,7 @@ $produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
             margin: 135px 3%;
             padding: 50px;
             box-shadow: 2px 4px 12px #00000014;
+            border-radius: 20px;
         }
 
         h1 {
@@ -97,13 +98,15 @@ $produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
             align-items: center;
             padding: 50px;
             margin: 30px;
-            border-radius: 5px;
-            box-shadow: 2px 4px 12px #00000061;
+            border-radius: 15px;
+            box-shadow: 2px 4px 12px #00000033;
         }
 
         .item>img {
             height: auto;
-            width: 150px;
+            width: auto;
+            max-height: 118px;
+            align-items: center;
         }
 
         .tamaina {
@@ -117,6 +120,7 @@ $produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
             margin: 135px 3% auto 0px;
             padding: 50px;
             box-shadow: 2px 4px 12px #00000014;
+            border-radius: 20px;
         }
 
         .erosketaPrezioa {
@@ -127,6 +131,7 @@ $produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
             margin-top: 50px;
             margin-bottom: 10px;
             font-size: 20px;
+            border-radius: 15px;
         }
 
         .erosketaPrezioa>button {
@@ -151,16 +156,21 @@ $produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
             width: 60%;
             margin: auto;
         }
-
-        #ezabatu {
-            background-color: red;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            width: 30%;
-            margin: auto;
-            cursor: pointer;
+        
+        .ezaBotoia{
+            width: 20%;
+            background-color: #f5f5f7;
+            border: 2px solid red;
+            border-radius: 100%;
+            justify-self: center;
         }
+        .fas.fa-trash-alt {
+            font-size: 100%;
+            color: red;
+            cursor: pointer;
+            text-align: center;
+            padding: 5px;
+        }   
     </style>
 </head>
 
@@ -186,9 +196,9 @@ $produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <p class="tamaina">Kantitatea: <?= $p["kantitatea"] ?></p>
 
 
-                    <button type="submit" id="ezabatu"
+                    <button class= "ezaBotoia" type="submit"
                             name="produktuak_id"
-                            value="<?= $p["id"] ?>">X</button>
+                            value="<?= $p["id"] ?>"><i class="fas fa-trash-alt"></i></button>
                 </div>
             <?php endforeach; ?>
 
@@ -197,7 +207,7 @@ $produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
     <div class="ordainketa">
-        <h1>Erosi</h1>
+        <h1>Erosketa</h1>
 
         <div class="erosketaPrezioa">
             <?php

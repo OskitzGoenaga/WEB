@@ -11,38 +11,41 @@
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <title>Produktuak</title>
 </head>
-
 <body>
     <?php
     include_once "konexioa.php";
     include_once "navbar.php";
-    ?>
-
-    <form class="filtratu" action="produktuak.php" method="get">
-        <label for="mota">Mota: </label>
-        <select class="mota" name="mota" id="mota">
-            <option value="">-- Aukeratu --</option>
-            <option value="telefonoa">Telefonoak</option>
-            <option value="ordenagailua">Ordenagailuak</option>
-            <option value="tablet">Tabletak</option>
-        </select>
-        <label for="asc">ASC</label>
-        <input type="radio" name="orden" id="asc" value="ASC" checked>
-        <label for="desc">DESC</label>
-        <input type="radio" name="orden" id="desc" value="DESC">
-        <input class="filtratu-botoia" type="submit" value="Filtratu">
-    </form>
-
-    <?php
+    
     $mota = $_GET["mota"] ?? "";
     $ordena = $_GET["orden"] ?? "ASC";
     $letra = $_GET["bilatzailea"] ?? "";
-    if ($mota == "") {
-        $stmt = $pdo->query("select id, izena, argazkia, prezioa from produktuak where izena like '%$letra%' order by izena $ordena;");
-    } else {
-        $kontsulta = "select id, izena, argazkia, prezioa from produktuak where mota='$mota' order by izena $ordena;";
-        $stmt = $pdo->query($kontsulta);
+    ?>
+
+    <form class="filtratu" action="produktuak.php" method="get">
+        <input class="bilatzailea" type="text" name="bilatzailea" placeholder="Bilatu..." value="<?=$letra;?>">
+        <label for="mota">Mota: </label>
+        <select class="mota" name="mota" id="mota">
+            <option value="">-- Aukeratu --</option>
+            <option value="telefonoa" <?= $mota === "telefonoa" ? "selected" : ""; ?>>Telefonoak</option>
+            <option value="ordenagailua" <?= $mota === "ordenagailua" ? "selected" : ""; ?>>Ordenagailuak</option>
+            <option value="tablet" <?= $mota === "tablet" ? "selected" : ""; ?>>Tabletak</option>
+        </select>
+        <label for="asc">ASC</label>
+        <input type="radio" name="orden" id="asc" value="ASC" <?= $ordena === "ASC" ? "checked" : ""; ?>>
+        <label for="desc">DESC</label>
+        <input type="radio" name="orden" id="desc" value="DESC" <?= $ordena === "DESC" ? "checked" : ""; ?>>
+        <input class="filtratu-botoia" type="submit" value="Filtratu">
+    </form>
+    <?php
+
+    $where = "1=1";
+    if ($mota != "") {
+        $where .= " AND mota='$mota'";
     }
+    if ($letra != "") {
+        $where .= " AND izena like '%$letra%'";
+    }
+    $stmt = $pdo->query("select id, izena, argazkia, prezioa from produktuak where $where order by izena $ordena;");
     ?>
 
     <section class="edukia">
