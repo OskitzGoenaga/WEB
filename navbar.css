@@ -24,40 +24,27 @@
   left: 0;
   height: 100vh;
   background-color: #fff;
-  width: 0%;
   position: fixed;
   border-right: 1px solid #000;
   box-sizing: border-box;
-}
-
-.menu-edukia2 {
-  z-index: 1000;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  background-color: #fff;
-  width: 30%;
-  position: fixed;
-  border-right: 1px solid #000;
-  box-sizing: border-box;
-}
-
-.menu-edukia,
-.menu-edukia2 {
   overflow: hidden;
-  transition: width 300ms ease;
+}
+.itxita {
+  width: 0%;
+}
+
+.irekita {
+  width: 30%;
+  opacity: 1;
+  pointer-events: auto;
+  box-shadow: 4px 0 18px rgba(0,0,0,0.08);
 }
 
 .menu-barrua {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 200ms ease 50ms;
-  padding: 30px 20px;
-}
-
-.menu-edukia2 .menu-barrua {
   opacity: 1;
   pointer-events: auto;
+  transition: opacity 200ms ease 50ms;
+  padding: 30px 20px;
 }
 
 .menu-lista {
@@ -70,30 +57,24 @@
   text-align: left;
 }
 
-.menu-lista li a {
-  color: #000;
-  text-decoration: none;
-  font-size: 120%;
-}
-
 .menu-lista li{
   border-bottom: 1px solid #f0f0f0;
 }
 
-.menu-lista li a{
+.menu-lista li a {
+  color: #000;
+  text-decoration: none;
+  font-size: 120%;
   display: block;
   padding: 14px 6px;
   transition: background 150ms ease, color 150ms ease;
   font-weight: 600;
 }
+
 .menu-lista li a:hover{
   background: #f7f7f7;
   color: #000;
 }
-.menu-edukia2{
-  box-shadow: 4px 0 18px rgba(0,0,0,0.08);
-}
-
 
 .logo img {
   max-width: 100%;
@@ -114,7 +95,8 @@
 
 .navbar {
   display: flex;
-  margin-right: 50px;
+  margin-right: 20px;
+  align-items: center; 
 }
 
 .navbar a {
@@ -146,12 +128,51 @@
   font-weight: bold;
 }
 
-.navbar img {
-  width: 101%;
-  height: auto;
-  max-height: 24px;
-}
-
 .navbar a:hover {
   background: #e91e63;
 }
+
+.perfila{
+  width: auto;
+  height: 35px;
+  padding: 20px;
+  cursor: pointer;
+  position: relative;
+}
+
+.perfil-dropdown {
+  display: none;
+  position: absolute;
+  right: 20px;
+  top: 75px;
+  background-color: white;
+  min-width: 200px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  border-radius: 8px;
+  z-index: 1000;
+  padding: 10px 0;
+}
+
+.perfil-dropdown.erakutsi {
+  display: block;
+}
+
+.perfil-izena {
+  padding: 12px 20px;
+  font-weight: bold;
+  color: black;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.perfil-dropdown a {
+  display: block;
+  padding: 12px 20px;
+  color: black;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.perfil-dropdown a:hover {
+  background-color: #f5f5f7;
+}
+

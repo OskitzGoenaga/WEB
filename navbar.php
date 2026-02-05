@@ -1,4 +1,4 @@
-<div id="ME" class="menu-edukia">
+<div id="ME" class="menu-edukia itxita">
     <div class="menu-barrua">
         <ul class="menu-lista">
             <li><a href="sarrera.php#berriak">Berriak</a></li>
@@ -44,6 +44,16 @@ if (isset($_SESSION['id'])) {
             <i class="fa fa-shopping-cart" aria-hidden="true" ></i>
             <p id="zenbakia"><strong><?= $zenb;?></strong></p>
         </div>
+        <img class= "perfila" src="Argazkiak/perfila.jpg">
+        <div id="perfil-menu" class="perfil-dropdown">
+            <?php if (isset($_SESSION['id'])): ?>
+                <p class="perfil-izena">Kaixo, <?= $_SESSION['izena'] ?>!</p>
+                <a href="itxiSaioa.php" class="itxi-saioa">Itxi saioa</a>
+            <?php else: ?>
+                <a href="hasiSaioa.php">Hasi saioa</a>
+                <a href="login.php">Erregistratu</a>
+            <?php endif; ?>
+        </div>
     </nav>
 </div>
 
@@ -54,11 +64,20 @@ if (isset($_SESSION['id'])) {
     $(".saskia i").click(function () {
         window.location.href = "saskia.php"; 
     });
-    $(".menu-desplegablea img").click(function () {
-        $("#ME").removeClass("menu-edukia").addClass("menu-edukia2");
-        return false;
+    
+    $(".perfila").click(function () {
+        $("#perfil-menu").toggleClass("erakutsi");
     });
-    $(document).click(function () {
-        $("#ME").removeClass("menu-edukia2").addClass("menu-edukia");
+    
+    $(document).click(function (e) {
+        if (!$(e.target).closest('.perfila, #perfil-menu').length) {
+            $("#perfil-menu").removeClass("erakutsi");
+        }
+        $("#ME").removeClass("irekita").addClass("itxita");
+    });
+    
+    $(".menu-desplegablea img").click(function () {
+        $("#ME").removeClass("itxita").addClass("irekita");
+        return false;
     });
 </script>
