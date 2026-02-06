@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["produktuak_id"])) {
 
     $stmt = $pdo->prepare("
         SELECT kantitatea 
-        FROM saskia 
+        FROM saskiak 
         WHERE produktua_id = :produktua AND bezeroa_id = :bezeroa
     ");
     $stmt->execute([
@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["produktuak_id"])) {
         if ($errenkada["kantitatea"] <= 1) {
 
             $stmt = $pdo->prepare("
-                DELETE FROM saskia 
+                DELETE FROM saskiak 
                 WHERE produktua_id = :produktua AND bezeroa_id = :bezeroa
             ");
             $stmt->execute([
@@ -54,9 +54,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["produktuak_id"])) {
     exit();
 }
 
-$stmt = $pdo->prepare("
+$stmt = $pdo->prepare(" 
     SELECT p.id, p.izena, p.prezioa, s.kantitatea, p.argazkia
-    FROM saskia s
+    FROM saskiak s
     INNER JOIN produktuak p ON s.produktua_id = p.id
     INNER JOIN salmentak sa ON s.salmenta_id = sa.id
     WHERE s.bezeroa_id = :id and sa.id is null

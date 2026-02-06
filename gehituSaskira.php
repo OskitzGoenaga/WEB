@@ -17,7 +17,7 @@ $bezeroa = $_SESSION["id"];
 
 // Comprobamos si el producto ya está en la cesta
 $stmt = $pdo->prepare("
-    SELECT kantitatea FROM saskia 
+    SELECT kantitatea FROM saskiak 
     WHERE produktua_id = :produktua AND bezeroa_id = :bezeroa
 ");
 $stmt->execute([
@@ -52,7 +52,7 @@ if ($kantitateaActual >= $stock) {
 // Si está en la cesta, aumentamos la cantidad en 1
 if ($kantitateaActual > 0) {
     $stmt = $pdo->prepare("
-        UPDATE saskia 
+        UPDATE saskiak 
         SET kantitatea = kantitatea + 1
         WHERE produktua_id = :produktua AND bezeroa_id = :bezeroa
     ");
@@ -63,7 +63,7 @@ if ($kantitateaActual > 0) {
 } else {
     // Si no está en la cesta, insertamos
     $stmt = $pdo->prepare("
-        INSERT INTO saskia (kantitatea, data, bezeroa_id, produktua_id, salmenta_id)
+        INSERT INTO saskiak (kantitatea, data, bezeroa_id, produktua_id, salmenta_id)
         VALUES (1, CURRENT_DATE, :bezeroa, :produktua, NULL)
     ");
     $stmt->execute([
