@@ -1,135 +1,183 @@
 <?php
-include_once "konexioa.php";
 session_start();
+include_once "konexioa.php";
+
+// Egiaztatu sesioa
+if (!isset($_SESSION['id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$bezero_id = $_SESSION['id'];
+
+// Salmenta berri bat sortu erosi botoia sakatutakoan
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['erosi'])) {
+    $stmt = $pdo->prepare("INSERT INTO salmentak (id) VALUES (NULL)");
+    $stmt->execute();
+
+    // Salmenta ID-a eskuratu eta saskian gorde
+    $stmt = $pdo->prepare("UPDATE saskiak SET salmenta_id = :salmenta_id WHERE bezeroa_id = :bezero_id AND salmenta_id IS NULL");
+    $stmt->execute([
+        ':salmenta_id' => $pdo->lastInsertId(),
+        ':bezero_id' => $bezero_id
+    ]);
+}
+
+// Bezeroaren salmentak eskuratu
 $stmt = $pdo->prepare("
-INSERT INTO salmentak (faktura_path) VALUES (null)
+    SELECT DISTINCT s.id, s.faktura_path, MIN(sk.data) as data
+    FROM salmentak s
+    JOIN saskiak sk ON sk.salmenta_id = s.id
+    WHERE sk.bezeroa_id = :bezero_id
+    GROUP BY s.id, s.faktura_path
+    ORDER BY s.id DESC
 ");
-$stmt->execute();
-$salmentaId = $pdo->lastInsertId();
-
-$stmt = $pdo->prepare("
-        UPDATE saskiak 
-        SET salmenta_id = :id
-        WHERE salmenta_id is null AND bezeroa_id = :bezeroa
-    ");
-
-    $bezeroa = $_SESSION["id"];
-
-$stmt->execute([
-    "id" => $salmentaId,
-    "bezeroa" => $bezeroa
-]);
-
-$stmt = $pdo->prepare("
-    SELECT p.id, p.izena, p.prezioa, s.kantitatea, p.argazkia
-    FROM saskiak s
-    JOIN produktuak p ON s.produktua_id = p.id
-    WHERE s.bezeroa_id = :id
-    ");
-$stmt->execute([":id" => $_SESSION["id"]]);
-$produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-$stmt = $pdo->prepare("
-        UPDATE produktuak 
-        SET stock = :stock
-        WHERE produktua_id = :produktua AND bezeroa_id = :bezeroa
-    ");
-
-
-    $bezeroa = $_SESSION["id"];
-
-$stock= $stock - $produktua["kantitatea"];
-
-$stmt->execute([
-    "stock" => $stock,
-    "produktua" => $produktuaId,
-    "bezeroa"   => $bezeroa
-]);
-
-
+$stmt->execute([':bezero_id' => $bezero_id]);
+$salmentak = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-<!DOCTYPE html>
-<html lang="en">
 
+<!DOCTYPE html>
+<html lang="eu">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Erosketa</title>
+    <title>Nire Fakturak</title>
     <link rel="stylesheet" href="orokorra.css">
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="footer.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
-        #hasiera {
-            margin-top: 50px;
-            font-size: 50px;
+        .fakturak-edukia {
+            padding-top: 150px;
+            min-height: 80vh;
+            background-color: #f5f5f7;
         }
 
-        img {
-            height: 100px;
-            width: auto;
+        .fakturak-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px;
         }
-
-        .erositakoa {
-            width: 50%;
-            margin: auto;
-            text-align: center;
+        
+        h1 {
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: #333;
         }
-
+        
+        .faktura-taula {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
         table {
-
             width: 100%;
         }
-
-        th,
+        
+        thead {
+            background: #333;
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
         td {
-
-            border: 1px solid;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .erosketa-titulua>th{
+            text-align: center;
+            border-radius: 5px
+        }
+        
+        tbody tr:hover {
+            background: #f9f9f9;
+        }
+        
+        .deskargatuBotoia {
+            background: #007bff;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+        }
+        
+        .deskargatuBotoia:hover {
+            background: #0056b3;
+        }
+        
+        .ikusi-botoia {
+            background: #28a745;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .ikusi-botoia:hover {
+            background: #1e7e34;
+        }
+        
+        .hutsik {
+            text-align: center;
+            padding: 50px;
+            color: #666;
         }
     </style>
 </head>
-
 <body>
-    <h1 id="hasiera">Erosketa</h1>
-    <p>Erosketa arrakastaz egin da. Eskerrik asko <?= $_SESSION["izena"] ?>! </p>
+    <?php include_once "navbar.php"; ?>
 
-
-    <?php $i=1; ?>
-    <?php foreach ($produktua as $p): ?>
-        <div class="erositakoa">
-            <h3><?= $p["izena"] ?></h3>
-            <table>
-                <tr>
-                    <th>
-                        Produktua
-                    </th>
-                    <th>
-                        Argazkia
-                    </th>
-                    <th>
-                        Prezioa
-                    </th>
-                    <th>
-                        Kantitatea
-                    </th>
-                </tr>
-
-                <tr>
-                    <td>
-                        <?= $i; ?>
-                    </td>
-                    <td>
-                        <?php $linka = 'Argazkiak/' . $p['argazkia']; ?>
-                        <img src="<?= $linka ?>">
-                    </td>
-                    <td>
-                        <p class="tamaina"><?= $p["prezioa"] ?> €</p>
-                    </td>
-                    <td>
-                        <p class="tamaina">Kantitatea: <?= $p["kantitatea"] ?></p>
-                    </td>
-                </tr>
-            </table>
+    <div class="fakturak-edukia">
+        <div class="fakturak-container">
+            <h1>Nire Fakturak</h1>
+            
+            <?php if (count($salmentak) > 0): ?>
+                <div class="faktura-taula">
+                    <table>
+                        <thead>
+                            <tr class="erosketa-titulua">
+                                <th>Faktura Zenbakia</th>
+                                <th>Deskargatu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($salmentak as $salmenta): ?>
+                                <tr>
+                                    <td><strong>FAK-<?= $salmenta['id'] ?></strong></td>
+                                    <td>
+                                        <?php if ($salmenta['faktura_path']): ?>
+                                            <a href="fakturak/faktura_<?= $salmenta['id'] ?>.pdf" class="ikusi-botoia" target="_blank">Ikusi
+                                            </a>
+                                            <a href="fakturak/faktura_<?= $salmenta['id'] ?>.pdf" class="deskargatuBotoia" download> Deskargatu
+                                            </a>
+                                        <?php else: ?>
+                                            <span>PDF-rik ez</span>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php else: ?>
+                <div class="hutsik">
+                    <p>Ez duzu fakturarik oraindik.</p>
+                    <a href="produktuak.php">Egin erosketa bat!</a>
+                </div>
+            <?php endif; ?>
         </div>
-        <?php $i++; ?>
-    <?php endforeach; ?>
+    </div>
 </body>
-
 </html>

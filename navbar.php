@@ -16,7 +16,7 @@ $zenb = 0;
 
 if (isset($_SESSION['id'])) {
     $stmt = $pdo->prepare("
-        SELECT COUNT(kantitatea) AS kant FROM saskiak WHERE bezeroa_id = :id
+        SELECT COUNT(kantitatea) AS kant FROM saskiak WHERE bezeroa_id = :id AND salmenta_id IS NULL
     ");
     $stmt->execute([":id" => $_SESSION["id"]]);
     $r = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -49,6 +49,7 @@ if (isset($_SESSION['id'])) {
             <?php if (isset($_SESSION['id'])): ?>
                 <p class="perfil-izena">Kaixo, <?= $_SESSION['izena'] ?>!</p>
                 <a href="itxiSaioa.php" class="itxi-saioa">Itxi saioa</a>
+                <a href="erosketa.php" class="itxi-saioa">Fakturak</a>
             <?php else: ?>
                 <a href="hasiSaioa.php">Hasi saioa</a>
                 <a href="login.php">Erregistratu</a>
@@ -62,7 +63,7 @@ if (isset($_SESSION['id'])) {
 <script>
 
     $(".saskia i").click(function () {
-        window.location.href = "saskia.php"; 
+        window.location.href = "saskia.php";
     });
     
     $(".perfila").click(function () {

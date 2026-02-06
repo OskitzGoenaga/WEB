@@ -15,9 +15,9 @@ if (!$produktuaId) {
 
 $bezeroa = $_SESSION["id"];
 
-// Comprobamos si el producto ya está en la cesta
+// Produktua saskian dagoen egiaztatu
 $stmt = $pdo->prepare("
-    SELECT kantitatea FROM saskiak 
+    SELECT kantitatea FROM saskiak
     WHERE produktua_id = :produktua AND bezeroa_id = :bezeroa
 ");
 $stmt->execute([
@@ -27,9 +27,9 @@ $stmt->execute([
 $enSaskia = $stmt->fetch(PDO::FETCH_ASSOC);
 $kantitateaActual = $enSaskia['kantitatea'] ?? 0;
 
-// Obtenemos el stock disponible del producto
+// Produktuaren stock-a lortu
 $stmt = $pdo->prepare("
-    SELECT stock FROM produktuak 
+    SELECT stock FROM produktuak
     WHERE id = :produktua
 ");
 $stmt->execute([
@@ -43,25 +43,48 @@ if (!$produktua) {
 
 $stock = $produktua['stock'];
 
-// Si ya hemos alcanzado el stock, no añadir
+// Ez badago stockik, ez dugu ezer gehituko eta alert bat erakutsiko dugu
 if ($kantitateaActual >= $stock) {
     echo "<script>alert('Stocka amaitu da.'); window.location.href='produktuak.php';</script>";
     exit();
 }
-
-// Si está en la cesta, aumentamos la cantidad en 1
+// Saskian badago, kantitatea handitu egingo dugu, bestela saskian produktu berria sortuko dugu
 if ($kantitateaActual > 0) {
     $stmt = $pdo->prepare("
-        UPDATE saskiak 
-        SET kantitatea = kantitatea + 1
-        WHERE produktua_id = :produktua AND bezeroa_id = :bezeroa
-    ");
+        SELECT * FROM saskiak
+        WHERE produktua_id = :produktua AND bezeroa_id = :bezeroa AND salmenta_id IS NULL");
     $stmt->execute([
         "produktua" => $produktuaId,
         "bezeroa"   => $bezeroa
     ]);
+    $errenkada = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($errenkada) {
+        // Kantitatea handitu egingo dugu
+        $stmt = $pdo->prepare("
+            UPDATE saskiak
+            SET kantitatea = kantitatea + 1
+            WHERE produktua_id = :produktua AND bezeroa_id = :bezeroa AND salmenta_id IS NULL
+        ");
+        $stmt->execute([
+            "produktua" => $produktuaId,
+            "bezeroa"   => $bezeroa
+        ]);
+    }
+    else{
+        // Saskian badago baina salmenta_id ez da NULL, beraz, saskia berria sortuko dugu
+        $stmt = $pdo->prepare("
+            INSERT INTO saskiak (kantitatea, data, bezeroa_id, produktua_id, salmenta_id)
+            VALUES (1, CURRENT_DATE, :bezeroa, :produktua, NULL)
+        ");
+        $stmt->execute([
+            "bezeroa"   => $bezeroa,
+            "produktua" => $produktuaId
+        ]);
+    }
+
 } else {
-    // Si no está en la cesta, insertamos
+    // Saskian ez dago, produktua saskian gehituko dugu
     $stmt = $pdo->prepare("
         INSERT INTO saskiak (kantitatea, data, bezeroa_id, produktua_id, salmenta_id)
         VALUES (1, CURRENT_DATE, :bezeroa, :produktua, NULL)
@@ -71,7 +94,6 @@ if ($kantitateaActual > 0) {
         "produktua" => $produktuaId
     ]);
 }
-
 header("Location: produktuak.php");
 exit();
 ?>
