@@ -23,19 +23,19 @@
                 <div>
                     <div class="izenburuak">
                         <label>Enpresa: </label>
-                        <input type="text" name="enpresa" placeholder="Enpresaren izena" required /><br>
+                        <input type="text" name="enpresa" required /><br>
                     </div>
                     <div class="izenburuak">
                         <label>Email-a: </label>
-                        <input type="email" name="email" placeholder="Email" required /><br>
+                        <input type="email" name="email" required /><br>
                     </div>
                     <div class="izenburuak">
                         <label>Telefonoa: </label>
-                        <input type="tel" name="telefonoa" placeholder="Telefonoa" required /><br>
+                        <input type="tel" name="telefonoa"  required /><br>
                     </div>
                     <div class="izenburuak">
                         <label>Eskaintza: </label><br>
-                        <textarea name="eskaintza" placeholder="Zer eskaintzen duzu?" required></textarea>
+                        <textarea name="eskaintza" required></textarea>
                     </div>
                     <input type="submit" name="bidali" class="bidali" value="BIDALI"></input><br>
                 </div>
@@ -47,19 +47,36 @@
         $_SERVER["REQUEST_METHOD"] === "POST" &&
         isset($_POST['bidali'], $_POST['enpresa'], $_POST['telefonoa'], $_POST['email'], $_POST['eskaintza'])
     ) {
+
+        $stmt = $pdo->prepare("
+        SELECT telefonoa, email FROM hornitzaileak WHERE telefonoa = :tel OR email = :em
+        ");
+        $stmt->execute([
+            ":tel" => $_POST["telefonoa"],
+            ":em" => $_POST["email"]
+        ]);
+
+        if($stmt -> rowCount() != 0) {
+            ?> <script>
+           alert("Telefono edo email hori jada sartuta dago!");
+           </script>  <?php
+
+        exit;
+        }else{
+                    
         $hornitzaileak = "INSERT INTO hornitzaileak (id, enpresa, telefonoa, email, eskaintza) VALUES (null, :en, :tel, :ema, :esk)";
         $stmt = $pdo->prepare($hornitzaileak);
 
-        $stmt->execute([
+                $stmt->execute([
             ':en' => $_POST["enpresa"],
             ':tel' => $_POST["telefonoa"],
             ':ema' => $_POST["email"],
             ':esk' => $_POST["eskaintza"]
         ]);
 
-        header("Location: hornitzaile.php?ok=1");
-        exit;
-
+                header("Location: hornitzaile.php?ok=1");
+                exit;
+        }
     }
     ?>
     <?php if (isset($_GET['ok'])): ?>

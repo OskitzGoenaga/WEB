@@ -64,12 +64,12 @@ if (isset($_POST['bidali'])) {
             <form action="kontaktua.php" method="POST">
                 <div class="izenburuak">
                 <label>Email-a:</label>
-                <input type="email" name="email" placeholder="Email" required>
+                <input type="email" name="email" required>
             </div>
 
                 <div class="izenburuak">
                     <label>Arazoa:</label>
-                    <textarea name="arazoa" placeholder="Idatzi hemen zein izan den zure arazoa" required></textarea>
+                    <textarea name="arazoa" required></textarea>
                 </div>
                 <input type="submit" name="bidali" class="bidali" value="BIDALI">
             </form>
