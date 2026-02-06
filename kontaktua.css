@@ -28,7 +28,7 @@ body{
     color: #444;
 }
 .izenburuak {
-    text-align: left;
+    text-align: center;
     margin: 15px 0;
 }
 .izenburuak label {
@@ -36,15 +36,15 @@ body{
     margin-bottom: 8px;
 }
 .izenburuak>input{
-    border: 2px solid black;
-    border-radius: 3px;
-    padding: 5px;
+    border-radius: 7px;
+    border: 1px solid black;
+    padding: 10px 0px;
     width: 100%;
 }
 .izenburuak>textarea{
-    border: 2px solid black;
-    border-radius: 3px;
-    padding: 5px;
+     border-radius: 7px;
+    border: 1px solid black;
+    padding: 10px 0px;
     width: 100%;
     max-width: 100%;
     min-width: 100%;

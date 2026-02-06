@@ -6,8 +6,8 @@
     max-width: 500px;
     margin: 50px auto;
     padding: 40px;
-    background-color: rgb(255, 255, 255);  
-    color: rgb(0, 0, 0);           
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
     border-radius: 20px;
     box-shadow: 0 8px 20px rgba(176, 176, 176, 0.733);
 }
@@ -24,26 +24,30 @@
     margin-bottom: 30px;
     color: #444;
 }
+
 .izenburuak {
-    text-align: left;
+    text-align: center;
     margin: 15px 0;
 }
+
 .izenburuak label {
     font-size: 16px;
     margin-bottom: 8px;
 }
+
 .izenburuak>input {
-    border: 2px solid black;
-    border-radius: 3px;
-    padding: 5px;
+    border-radius: 7px;
+    border: 1px solid black;
+    padding: 10px 0px;
     width: 100%;
     max-width: 100%;
     min-width: 100%;
 }
+
 .izenburuak>textarea {
-    border: 2px solid black;
-    border-radius: 3px;
-    padding: 5px;
+    border-radius: 7px;
+    border: 1px solid black;
+    padding: 10px 0px;
     width: 100%;
     max-width: 100%;
     min-width: 100%;
