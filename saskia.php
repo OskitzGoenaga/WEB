@@ -14,8 +14,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["produktuak_id"])) {
     $bezeroa = $_SESSION["id"];
 
     $stmt = $pdo->prepare("
-        SELECT kantitatea 
-        FROM saskiak 
+        SELECT kantitatea
+        FROM saskiak
         WHERE produktua_id = :produktua AND bezeroa_id = :bezeroa
     ");
     $stmt->execute([
@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["produktuak_id"])) {
         if ($errenkada["kantitatea"] <= 1) {
 
             $stmt = $pdo->prepare("
-                DELETE FROM saskiak 
+                DELETE FROM saskiak
                 WHERE produktua_id = :produktua AND bezeroa_id = :bezeroa
             ");
             $stmt->execute([
@@ -39,9 +39,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["produktuak_id"])) {
 
         } else {
             $stmt = $pdo->prepare("
-                UPDATE saskia 
+                UPDATE saskiak
                 SET kantitatea = kantitatea - 1
-                WHERE produktua_id = :produktua AND bezeroa_id = :bezeroa
+                WHERE produktua_id = :produktua AND bezeroa_id = :bezeroa AND salmenta_id IS NULL
             ");
             $stmt->execute([
                 "produktua" => $produktuaId,
@@ -54,13 +54,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["produktuak_id"])) {
     exit();
 }
 
-$stmt = $pdo->prepare(" 
-    SELECT p.id, p.izena, p.prezioa, s.kantitatea, p.argazkia
+$stmt = $pdo->prepare(
+    "SELECT p.id, p.izena, p.prezioa, s.kantitatea, p.argazkia
     FROM saskiak s
     INNER JOIN produktuak p ON s.produktua_id = p.id
-    INNER JOIN salmentak sa ON s.salmenta_id = sa.id
-    WHERE s.bezeroa_id = :id and sa.id is null
-");
+    WHERE s.bezeroa_id = :id AND s.salmenta_id IS NULL"
+);
 $stmt->execute([":id" => $_SESSION["id"]]);
 $produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -171,7 +170,7 @@ $produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
             cursor: pointer;
             text-align: center;
             padding: 5px;
-        }   
+        }  
         #erosketaBtn{
             border-radius: 5px;
             background-color: black;
@@ -188,24 +187,17 @@ $produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="erosketa">
 
-
     <div class="saskia2">
         <h1>Erosketa saskia</h1>
         <p>Kaixo, <?= $_SESSION["izena"] ?>. Hemen dago zure saskia.</p>
-
-
         <form action="saskia.php" method="post">
-
             <?php foreach ($produktua as $p): ?>
                 <div class="item">
                     <?php $linka = 'Argazkiak/' . $p['argazkia']; ?>
                     <img src="<?= $linka ?>">
-
                     <h3 class="tamaina"><?= $p["izena"] ?></h3>
                     <p class="tamaina"><?= $p["prezioa"] ?> €</p>
                     <p class="tamaina">Kantitatea: <?= $p["kantitatea"] ?></p>
-
-
                     <button class= "ezaBotoia" type="submit"
                             name="produktuak_id"
                             value="<?= $p["id"] ?>"><i class="fas fa-trash-alt"></i></button>
@@ -213,11 +205,8 @@ $produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endforeach; ?>
         </form>
     </div>
-
-
     <div class="ordainketa">
         <h1>Ordainketa</h1>
-
         <div class="erosketaPrezioa">
             <?php
             $i = 1;
@@ -236,11 +225,10 @@ $produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 ?>
             <?php endforeach; ?>
             <p id="prezTot">TOTALA: <?= $preziototala ?> €</p>
-            <button id="erosketaBtn" type="submit">EROSI</button>
+            <button id="erosketaBtn" name="erosi" type="submit">EROSI</button>
         </form>
         </div>
     </div>
 </div>
-
 </body>
 </html>
