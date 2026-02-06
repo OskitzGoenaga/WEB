@@ -1,10 +1,10 @@
 <?php
 
 // db.php
-$host = "localhost"; //
+$host = "192.168.115.163"; //
 $dbname = "db_erronka2";
-$user = "root"; // XAMPP: root
-$pass = "1MG32025"; // XAMPP: sarri hutsik
+$user = "kudeatzailea"; // XAMPP: root
+$pass = "1MG3_2025"; // XAMPP: sarri hutsik
 
 $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
 
