@@ -1,4 +1,4 @@
-     <div class="linea"></div>
+<div class="linea2"></div>
 <section class="kontaktua">
     <div class="oina">
       <div>
@@ -20,7 +20,7 @@
     </div>
   </section>
   <div class="bukaera">
-     <div class="linea"></div>
+    <div class="linea"></div>
     <div class="eskubideak">
       <p>Ordainketak %100 seguruak</p>
       <img src="../WEB/Argazkiak/paypal.jpg">
