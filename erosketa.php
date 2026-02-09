@@ -21,13 +21,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['erosi'])) {
         ':salmenta_id' => $pdo->lastInsertId(),
         ':bezero_id' => $bezero_id
     ]);
+    header("Location: erosketa.php");
 }
 
 // Bezeroaren salmentak eskuratu
 $stmt = $pdo->prepare("
     SELECT DISTINCT s.id, s.faktura_path, MIN(sk.data) as data
     FROM salmentak s
-    JOIN saskiak sk ON sk.salmenta_id = s.id
+    INNER JOIN saskiak sk ON sk.salmenta_id = s.id
     WHERE sk.bezeroa_id = :bezero_id
     GROUP BY s.id, s.faktura_path
     ORDER BY s.id DESC

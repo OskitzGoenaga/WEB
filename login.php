@@ -1,8 +1,7 @@
 <?php
 session_start();
-require 'konexioa.php'; // tu conexión a la base de datos
+require 'konexioa.php';
 ?>
-<!-- Formulario simple -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -83,39 +82,44 @@ require 'konexioa.php'; // tu conexión a la base de datos
 
 </html>
 <?php
-    if (
-        $_SERVER["REQUEST_METHOD"] === "POST" &&
-        isset($_POST['bidali'], $_POST['izena'], $_POST['abizena'], $_POST['email'], $_POST['pasahitza'], $_POST['telefonoa'], $_POST['helbidea'])
-    ) {
-        $bezeroak = "INSERT INTO bezeroak (id, izena, abizena, email, pasahitza, telefonoa, helbidea) VALUES (null, :iz, :ab, :em, :pas, :tel, :hel)";
-        $stmt = $pdo->prepare($bezeroak);
-
-        $stmt->execute([
-            ':iz' => $_POST["izena"],
-            ':ab' => $_POST["abizena"],
-            ':em' => $_POST["email"],
-            ':pas' => $_POST["pasahitza"],
-            ':tel' => $_POST["telefonoa"],
-            ':hel' => $_POST["helbidea"]
-        ]);
-
-        // Consulta básica con prepared statements
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        
         $sql = "SELECT * FROM bezeroak WHERE email = :em AND pasahitza = :pas";
-        $stmtt = $pdo->prepare($sql);
-        $stmtt->execute([
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
             ':em' => $_POST["email"],
             ':pas' => $_POST["pasahitza"]
         ]);
-        $bezeroa = $stmtt->fetch(PDO::FETCH_ASSOC);
 
-        if ($bezeroa) {
-            // Saioan gorde
-            $_SESSION['id'] = $bezeroa['id'];
-            $_SESSION['izena'] = $bezeroa['izena'];
+        if ($stmt->rowCount() != 0) { ?>
+            <script>
+                alert("Telefono edo email hori jada sartuta dago!");    
+            </script>
+            <?php
+            exit;
+        } else {
+            $bezeroak = "INSERT INTO bezeroak (id, izena, abizena, email, pasahitza, telefonoa, helbidea) VALUES (null, :iz, :ab, :em, :pas, :tel, :hel)";
+            $stmt = $pdo->prepare($bezeroak);
 
-            header("Location: sarrera.php?ok=1");
-            exit();
+            $stmt->execute([
+                ':iz' => $_POST["izena"],
+                ':ab' => $_POST["abizena"],
+                ':em' => $_POST["email"],
+                ':pas' => $_POST["pasahitza"],
+                ':tel' => $_POST["telefonoa"],
+                ':hel' => $_POST["helbidea"]
+            ]);
+
+            if ($stmt) {
+                // Saioan gorde
+                $_SESSION['id'] = $bezeroa['id'];
+                $_SESSION['izena'] = $bezeroa['izena'];
+
+                header("Location: sarrera.php?ok=1");
+                exit();
+            }
         }
+        
     }
     ?>
     <?php if (isset($_GET['ok'])): ?>

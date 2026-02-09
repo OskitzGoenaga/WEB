@@ -1,8 +1,7 @@
 <?php
 session_start();
-require 'konexioa.php'; // tu conexión a la base de datos
+require 'konexioa.php';
 ?>
-<!-- Formulario simple -->
 <!DOCTYPE html>
 <html lang="en">
 

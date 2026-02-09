@@ -43,10 +43,7 @@
         </div>
     </div>
     <?php
-    if (
-        $_SERVER["REQUEST_METHOD"] === "POST" &&
-        isset($_POST['bidali'], $_POST['enpresa'], $_POST['telefonoa'], $_POST['email'], $_POST['eskaintza'])
-    ) {
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $stmt = $pdo->prepare("
         SELECT telefonoa, email FROM hornitzaileak WHERE telefonoa = :tel OR email = :em
@@ -56,18 +53,19 @@
             ":em" => $_POST["email"]
         ]);
 
-        if($stmt -> rowCount() != 0) {
-            ?> <script>
+        if ($stmt -> rowCount() != 0) { ?> 
+        <script>
            alert("Telefono edo email hori jada sartuta dago!");
-           </script>  <?php
+        </script>  
+        <?php
 
         exit;
-        }else{
+        } else{
                     
         $hornitzaileak = "INSERT INTO hornitzaileak (id, enpresa, telefonoa, email, eskaintza) VALUES (null, :en, :tel, :ema, :esk)";
         $stmt = $pdo->prepare($hornitzaileak);
 
-                $stmt->execute([
+        $stmt->execute([
             ':en' => $_POST["enpresa"],
             ':tel' => $_POST["telefonoa"],
             ':ema' => $_POST["email"],
@@ -80,8 +78,7 @@
     }
     ?>
     <?php if (isset($_GET['ok'])): ?>
-        <script src="https://code.jquery.com/jquery-4.0.0.js"
-            integrity="sha256-9fsHeVnKBvqh3FB2HYu7g2xseAZ5MlN6Kz/qnkASV8U=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-4.0.0.js" integrity="sha256-9fsHeVnKBvqh3FB2HYu7g2xseAZ5MlN6Kz/qnkASV8U=" crossorigin="anonymous"></script>
         <script>
             alert("Hornitzailea bihurtu zara! Eskerrik asko zure eskaintzarengatik");
         </script>
