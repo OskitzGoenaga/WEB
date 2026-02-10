@@ -1,30 +1,39 @@
 <?php
+// Saioa hasi (erabiltzailearen sesioa kudeatzeko)
 session_start();
+
+// Datu-baseko konexioa kargatu
 include_once "konexioa.php";
 
-// Egiaztatu sesioa
+// Egiaztatu erabiltzailea saioa hasita dagoen
+// Ez badago, login orrira bidali
 if (!isset($_SESSION['id'])) {
     header("Location: login.php");
     exit();
 }
 
+// Saioan gordetako bezeroaren ID-a hartu
 $bezero_id = $_SESSION['id'];
 
-// Salmenta berri bat sortu erosi botoia sakatutakoan
+// "Erosi" botoia sakatzen denean salmenta berri bat sortu
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['erosi'])) {
+    // Salmentak taulan erregistro berri bat txertatu
     $stmt = $pdo->prepare("INSERT INTO salmentak (id) VALUES (NULL)");
     $stmt->execute();
 
-    // Salmenta ID-a eskuratu eta saskian gorde
+    // Sortu berri den salmentaren ID-a hartu eta
+    // bezeroaren saskiko elementuei esleitu (salmenta_id hutsik dutenak)
     $stmt = $pdo->prepare("UPDATE saskiak SET salmenta_id = :salmenta_id WHERE bezeroa_id = :bezero_id AND salmenta_id IS NULL");
     $stmt->execute([
         ':salmenta_id' => $pdo->lastInsertId(),
         ':bezero_id' => $bezero_id
     ]);
+
+    // Erosketa orrira birbideratu
     header("Location: erosketa.php");
 }
 
-// Bezeroaren salmentak eskuratu
+// Bezero honen salmentak (fakturak) datu-basetik eskuratu
 $stmt = $pdo->prepare("
     SELECT DISTINCT s.id, s.faktura_path, MIN(sk.data) as data
     FROM salmentak s
@@ -34,6 +43,8 @@ $stmt = $pdo->prepare("
     ORDER BY s.id DESC
 ");
 $stmt->execute([':bezero_id' => $bezero_id]);
+
+// Emaitzak array batean gorde
 $salmentak = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -138,7 +149,10 @@ $salmentak = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </style>
 </head>
 <body>
-    <?php include_once "navbar.php"; ?>
+    <?php 
+    // Nabigazio barra kargatu
+    include_once "navbar.php"; 
+    ?>
 
     <div class="fakturak-edukia">
         <div class="fakturak-container">
@@ -156,14 +170,18 @@ $salmentak = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <tbody>
                             <?php foreach ($salmentak as $salmenta): ?>
                                 <tr>
+                                    <!-- Fakturaren zenbakia erakutsi -->
                                     <td><strong>FAK-<?= $salmenta['id'] ?></strong></td>
                                     <td>
                                         <?php if ($salmenta['faktura_path']): ?>
+                                            <!-- Faktura PDF-a ikusteko botoia -->
                                             <a href="fakturak/faktura_<?= $salmenta['id'] ?>.pdf" class="ikusi-botoia" target="_blank">Ikusi
                                             </a>
+                                            <!-- Faktura PDF-a deskargatzeko botoia -->
                                             <a href="fakturak/faktura_<?= $salmenta['id'] ?>.pdf" class="deskargatuBotoia" download> Deskargatu
                                             </a>
                                         <?php else: ?>
+                                            <!-- PDF-a oraindik sortuta ez badago -->
                                             <span>PDF-rik ez</span>
                                         <?php endif; ?>
                                     </td>
@@ -173,6 +191,7 @@ $salmentak = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </table>
                 </div>
             <?php else: ?>
+                <!-- Fakturarik ez badago erakusten den mezua -->
                 <div class="hutsik">
                     <p>Ez duzu fakturarik oraindik.</p>
                     <a href="produktuak.php">Egin erosketa bat!</a>

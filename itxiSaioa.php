@@ -1,13 +1,14 @@
 <?php
+// Saioa hasi (session-ak erabiltzeko)
 session_start();
 
-// Destruir todas las variables de sesión
+// Sesio guztiko aldagaiak ezabatu
 $_SESSION = array();
 
-// Destruir la sesión
+// Sesioa guztiz suntsitu
 session_destroy();
 
-// Redirigir a la página de inicio
+// Hasierako orrira birbideratu
 header("Location: sarrera.php");
 exit();
 ?>

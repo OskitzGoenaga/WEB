@@ -13,14 +13,16 @@
 </head>
 <body>
     <?php
-    include_once "konexioa.php";
-    include_once "navbar.php";
+    include_once "konexioa.php"; // Datu-basearekin konektatu
+    include_once "navbar.php";   // Nabigazio barra gehitu
     
+    // GET parametroak jaso
     $mota = $_GET["mota"] ?? "";
     $ordena = $_GET["orden"] ?? "ASC";
     $letra = $_GET["bilatzailea"] ?? "";
     ?>
 
+    <!-- Produktuen iragazkia eta bilaketa -->
     <form class="filtratu" action="produktuak.php" method="get">
         <input class="bilatzailea" type="text" name="bilatzailea" placeholder="Bilatu..." value="<?=$letra;?>">
         <label for="mota">Mota: </label>
@@ -36,21 +38,26 @@
         <input type="radio" name="orden" id="desc" value="DESC" <?= $ordena === "DESC" ? "checked" : ""; ?>>
         <input class="filtratu-botoia" type="submit" value="Filtratu">
     </form>
-    <?php
 
-    $where = "1=1";
+    <?php
+    // SQL WHERE klausula eraiki iragazkien arabera
+    $where = "1=1"; // beti egia
     if ($mota != "") {
         $where .= " AND mota='$mota'";
     }
     if ($letra != "") {
         $where .= " AND izena like '%$letra%'";
     }
+
+    // Produktuak datu-baseatik jaso iragazkien arabera
     $stmt = $pdo->query("select id, izena, argazkia, prezioa from produktuak where $where order by izena $ordena;");
     ?>
 
+    <!-- Produktuen erakusleihoa -->
     <section class="edukia">
         <div class="kutxa-edukia">
             <?php while ($produktua = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
+                <!-- Produktu bakoitza formulario baten barruan -->
                 <form action="gehituSaskira.php" method="POST">
                     <div class="kutxa">
                         <div class="zatia1">
@@ -62,7 +69,9 @@
                         </div>
                         <div class="linea2"></div>
                         <div class="zatia2">
+                            <!-- Produktu ID gordetzeko input ezkutua -->
                             <input type="hidden" name="id" value="<?= $produktua['id'] ?>">
+                            <!-- Saskiratze botoia -->
                             <button type="submit" class="erosiBotoia" name="produktuak_id" value="<?= (int)$produktua['id'] ?>">
                                 SASKIRATU
                             </button>
@@ -73,6 +82,7 @@
             <?php endwhile; ?>
         </div>
     </section>
+
     <?php include_once "footer.php"; ?>
 </body>
 

@@ -1,5 +1,8 @@
 <?php
+// Saioa hasi (session-ak erabiltzeko)
 session_start();
+
+// Datu-baseko konexioa kargatu
 require 'konexioa.php';
 ?>
 <!DOCTYPE html>
@@ -51,10 +54,13 @@ require 'konexioa.php';
 </head>
 
 <body>
+    <!-- Login formulario nagusia -->
     <div class="formularioa">
 
         <h1 >SAIOA HASI</h1><br>
         <p id="testua">Saskia ikusteko edo arazoak bidaltzeko hasi saioa!</p>
+
+        <!-- Login formularioa: datuak hasiSaioa.php-ra bidaltzen dira -->
         <form action="hasiSaioa.php" method="POST">
 
             <label>Email:</label><br>
@@ -65,6 +71,8 @@ require 'konexioa.php';
 
             <button type="submit" id="saioaBtn">SAIOA HASI</button>
         </form>
+
+        <!-- Konturik ez dutenentzat erregistro orrira esteka -->
         <a href="login.php">Ez duzu kontua?</a>
     </div>
 </body>
@@ -72,28 +80,34 @@ require 'konexioa.php';
 </html>
 
 <?php
+// Formularioa bidali denean (POST eskaera)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    // Formetik jasotako datuak
     $email = $_POST['email'];
     $pasahitza = $_POST['pasahitza'];
 
-    // Consulta con prepared statements
+    // Bezeroa bilatu datu-basean (prepared statement erabiliz)
     $sql = "SELECT * FROM bezeroak WHERE email = :email AND pasahitza = :pasahitza";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
         ':email' => $email,
         ':pasahitza' => $pasahitza
     ]);
+
+    // Emaitza hartu
     $bezeroa = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($bezeroa) {
-        // Saioan gorde
+        // Bezeroa existitzen bada -> datuak sesioan gorde
         $_SESSION['id'] = $bezeroa['id'];
         $_SESSION['izena'] = $bezeroa['izena'];
 
+        // Hasierako orrira bidali
         header("Location: sarrera.php");
         exit();
     } else { ?>
+        <!-- Datuak okerrak badira alert bat erakutsi -->
         <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script> 
         <script>alert("Datu okerrak");</script>
     <?php }

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sarrera</title>
+    <!-- CSSak -->
     <link rel="stylesheet" href="navbar.css">
     <link rel="stylesheet" href="sarrera.css">
     <link rel="stylesheet" href="orokorra.css">
@@ -16,11 +17,9 @@
         width: 70%;
         margin: auto;
     }
-
     .slick-slide {
         height: initial;
     }
-
     .slick-prev:before,
     .slick-next:before {
         color: black;
@@ -29,17 +28,20 @@
     </style>
 </head>
 <body>
-    <?php include_once "konexioa.php"; ?>
-    <?php include_once "navbar.php"; ?>
+    <?php 
+    include_once "konexioa.php"; // Datu-basea konektatu
+    include_once "navbar.php";   // Nabigazio barra gehitu
 
-<?php 
-    $kontsulta = "select * from produktuak limit 8";
+    // Produktuak datu-baseatik lortu (max 8 azken produktuak)
+    $kontsulta = "SELECT * FROM produktuak LIMIT 8";
     $stmt = $pdo->query($kontsulta);
-?>
+    ?>
+
+    <!-- Berriak/slider -->
     <section id="berriak" class="berriak">
-    <h1 class="teknologia">Teknologia berriena!</h1>
-    <div class="kutxa-edukia slider">
-         <?php while ($produktua = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
+        <h1 class="teknologia">Teknologia berriena!</h1>
+        <div class="kutxa-edukia slider">
+            <?php while ($produktua = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
                 <form action="gehituSaskira.php" method="POST">
                     <div class="kutxa">
                         <div class="zatia1">
@@ -56,71 +58,65 @@
                                 SASKIRATU
                             </button>
                             <span class="balioa"><?= $produktua["prezioa"] . " €"; ?></span>
-
                         </div>
                     </div>
                 </form>
             <?php endwhile; ?>
-    </div>
+        </div>
     </section>
+
+    <!-- Prezio jasangarriak -->
     <section id="prezioa" class="prezioa">
         <article>
-      <img src="../WEB/Argazkiak/argazkia.jpg" />
-      <div class="jasangarritasuna">
-      <h2>Prezioak jasangarriak, etorkizun berriak.</h2>
-        <p>
-        Rebizi-n <strong>9, 11, 12 eta 13. GJHen</strong> alde egiten dugu:  
-        teknologia berriztuz, <strong>aurreztu</strong> eta <strong>planeta babesten duzu</strong>!  
-        Gailuak kalitatezkoak, <strong>prezio justuetan</strong> eta <strong>bigarren bizitza batekin</strong>.  
-        <i>— Zuk aukeratu, guk berriztuko dugu. Munduak eskertuko du!</i>
-        </p>
-      </div>
-      </article>
-         </section>
-      <section class="gu" id="norgara">
-    <h2 class="title1">Nor gara Rebizi-n?</h2>
-    <p>
-      Pasioz beteriko talde bat gara, teknologia eta jasangarritasuna uztartzen dituena. Gure helburua zure gailuak
-      berrerabiltzea da, ingurumena zainduz eta aurrezpena eskainiz.
-    </p>
-    <div class="kutxa-edukia2">
-      <div class="kutxa">
-        <h3>OIER MAIZA UGARTEMENDIA</h3>
-        <p>
-          Antolatzailea, proiektu hau aurrera eramatera ahalbidetu duen pertsona.
-        </p>
-      </div>
+            <img src="../WEB/Argazkiak/argazkia.jpg" />
+            <div class="jasangarritasuna">
+                <h2>Prezioak jasangarriak, etorkizun berriak.</h2>
+                <p>
+                    Rebizi-n <strong>9, 11, 12 eta 13. GJHen</strong> alde egiten dugu:  
+                    teknologia berriztuz, <strong>aurreztu</strong> eta <strong>planeta babesten duzu</strong>!  
+                    Gailuak kalitatezkoak, <strong>prezio justuetan</strong> eta <strong>bigarren bizitza batekin</strong>.  
+                    <i>— Zuk aukeratu, guk berriztuko dugu. Munduak eskertuko du!</i>
+                </p>
+            </div>
+        </article>
+    </section>
 
-      <div class="kutxa">
-        <h3>ANDER ORMAZABAL GARCIANDIA</h3>
+    <!-- Nor gara -->
+    <section class="gu" id="norgara">
+        <h2 class="title1">Nor gara Rebizi-n?</h2>
         <p>
-          Taldearen burbuina, denak funtzionatzearen arduraduna.
+            Pasioz beteriko talde bat gara, teknologia eta jasangarritasuna uztartzen dituena. 
+            Gure helburua zure gailuak berrerabiltzea da, ingurumena zainduz eta aurrezpena eskainiz.
         </p>
+        <div class="kutxa-edukia2">
+            <div class="kutxa">
+                <h3>OIER MAIZA UGARTEMENDIA</h3>
+                <p>Antolatzailea, proiektu hau aurrera eramatera ahalbidetu duen pertsona.</p>
+            </div>
+            <div class="kutxa">
+                <h3>ANDER ORMAZABAL GARCIANDIA</h3>
+                <p>Taldearen burbuina, denak funtzionatzearen arduraduna.</p>
+            </div>
+            <div class="kutxa">
+                <h3>OSKITZ GOENAGA URRETABIZKAIA</h3>
+                <p>Gure programatzaile aditua, webaren sortzailea.</p>
+            </div>
+        </div>
+    </section>
 
-      </div>
+    <?php include_once "footer.php"; ?>
 
-      <div class="kutxa">
-        <h3>OSKITZ GOENAGA URRETABIZKAIA</h3>
-        <p>
-          Gure programatzaile aditua, webaren sortzailea.
-        </p>
-      </div>
-    </div>
-  </section>
-  
-     <?php include_once "footer.php"; ?>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-migrate-3.6.0.js" integrity="sha256-K+9TyQ575NpZ999iNVvO9DXK2mBqL7jOryAz2FuQpcs=" crossorigin="anonymous"></script>
+    <!-- JSak -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-migrate-3.6.0.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="slick/slick.min.js"></script>
-
     <script>
     $(document).ready(function(){
         $('.slider').slick({
-        slidesToShow: 3,
-        slidesToScroll: 1
+            slidesToShow: 3,
+            slidesToScroll: 1
         });
     });
-</script>
-
+    </script>
 </body>
 </html>

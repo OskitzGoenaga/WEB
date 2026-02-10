@@ -1,18 +1,19 @@
 <?php
+include_once "konexioa.php";  // Datu-basearekin konektatzen da
+include_once "navbar.php";     // Nabigazio-barra gehitzen da
 
-include_once "konexioa.php";
-include_once "navbar.php";
-
+// Erabiltzaileak saioa hasi ez badu, login-era bidali
 if (!isset($_SESSION["id"])) {
     header("Location: hasiSaioa.php");
     exit();
 }
 
+// Produktua ezabatzeko edo kantitatea murrizteko logika
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["produktuak_id"])) {
-
     $produktuaId = $_POST["produktuak_id"];
     $bezeroa = $_SESSION["id"];
 
+    // Saskian dagoen egiaztatu
     $stmt = $pdo->prepare("
         SELECT kantitatea
         FROM saskiak
@@ -27,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["produktuak_id"])) {
 
     if ($errenkada) {
         if ($errenkada["kantitatea"] <= 1) {
-
+            // Produktua ezabatu
             $stmt = $pdo->prepare("
                 DELETE FROM saskiak
                 WHERE produktua_id = :produktua AND bezeroa_id = :bezeroa
@@ -36,8 +37,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["produktuak_id"])) {
                 "produktua" => $produktuaId,
                 "bezeroa"   => $bezeroa
             ]);
-
         } else {
+            // Kantitatea murriztu 1ekoa
             $stmt = $pdo->prepare("
                 UPDATE saskiak
                 SET kantitatea = kantitatea - 1
@@ -50,10 +51,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["produktuak_id"])) {
         }
     }
 
+    // Orri bera berriro kargatu
     header("Location: saskia.php");
     exit();
 }
 
+// Saskiaren edukia datu-baseatik lortu
 $stmt = $pdo->prepare(
     "SELECT p.id, p.izena, p.prezioa, s.kantitatea, p.argazkia
     FROM saskiak s
@@ -187,6 +190,7 @@ $produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="erosketa">
 
+    <!-- Saskia -->
     <div class="saskia2">
         <h1>Erosketa saskia</h1>
         <p>Kaixo, <?= $_SESSION["izena"] ?>. Hemen dago zure saskia.</p>
@@ -194,10 +198,11 @@ $produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php foreach ($produktua as $p): ?>
                 <div class="item">
                     <?php $linka = 'Argazkiak/' . $p['argazkia']; ?>
-                    <img src="<?= $linka ?>">
+                    <img src="<?= $linka ?>"> <!-- Produktuaren irudia -->
                     <h3 class="tamaina"><?= $p["izena"] ?></h3>
                     <p class="tamaina"><?= $p["prezioa"] ?> €</p>
                     <p class="tamaina">Kantitatea: <?= $p["kantitatea"] ?></p>
+                    <!-- Ezabatzeko botoia -->
                     <button class= "ezaBotoia" type="submit"
                             name="produktuak_id"
                             value="<?= $p["id"] ?>"><i class="fas fa-trash-alt"></i></button>
@@ -205,12 +210,14 @@ $produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endforeach; ?>
         </form>
     </div>
+
+    <!-- Ordainketa alderdia -->
     <div class="ordainketa">
         <h1>Ordainketa</h1>
         <div class="erosketaPrezioa">
             <?php
-            $i = 1;
-            $preziototala = 0;
+            $i = 1; // Produktu kontadorea
+            $preziototala = 0; // Guztizko prezioa
             ?>
         <form action="erosketa.php" method="post">
             <?php foreach ($produktua as $p): ?>
@@ -225,6 +232,7 @@ $produktua = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 ?>
             <?php endforeach; ?>
             <p id="prezTot">TOTALA: <?= $preziototala ?> €</p>
+            <!-- Erosi botoia -->
             <button id="erosketaBtn" name="erosi" type="submit">EROSI</button>
         </form>
         </div>

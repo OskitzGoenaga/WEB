@@ -1,9 +1,12 @@
 <?php
+// Saioa hasi (session-ak erabiltzeko)
 session_start();
+
+// Datu-baseko konexioa kargatu
 require 'konexioa.php';
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="eu">
 
 <head>
     <meta charset="UTF-8">
@@ -51,10 +54,13 @@ require 'konexioa.php';
 </head>
 
 <body>
+    <!-- Erregistro formulario nagusia -->
     <div class="formularioa">
 
         <h1 >SORTU KONTUA</h1><br>
         <p id="testua">Saskia ikusteko edo arazoak bidaltzeko kontu bat sortu behar duzu!</p>
+
+        <!-- Formularioa: datuak login.php-ra bidaltzen dira -->
         <form action="login.php" method="POST">
             <label>Izena:</label><br>
             <input type="text" name="izena" required><br><br>
@@ -74,58 +80,68 @@ require 'konexioa.php';
             <label>Helbidea:</label><br>
             <input type="text" name="helbidea" required><br><br>
 
+            <!-- Erregistratu botoia -->
             <button type="submit" name="bidali" id="saioaBtn">ERREGISTRATU</button>
         </form>
+
+        <!-- Jadanik kontua dutenentzako esteka -->
         <a href="hasiSaioa.php">Jadanik kontua duzu?</a>
     </div>
 </body>
 
 </html>
+
 <?php
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        
-        $sql = "SELECT * FROM bezeroak WHERE email = :em AND pasahitza = :pas";
-        $stmt = $pdo->prepare($sql);
+// Formularioa bidali denean (POST eskaera)
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+    // Begiratu emaila eta pasahitza datu-basetan dagoen
+    $sql = "SELECT * FROM bezeroak WHERE email = :em AND pasahitza = :pas";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ':em' => $_POST["email"],
+        ':pas' => $_POST["pasahitza"]
+    ]);
+
+    // Email edo pasahitza jada existitzen badira alert bat erakutsi
+    if ($stmt->rowCount() != 0) { ?>
+        <script>
+            alert("Telefono edo email hori jada sartuta dago!");    
+        </script>
+        <?php
+        exit;
+    } else {
+        // Bezero berria sartu datu-basera
+        $bezeroak = "INSERT INTO bezeroak (id, izena, abizena, email, pasahitza, telefonoa, helbidea) VALUES (null, :iz, :ab, :em, :pas, :tel, :hel)";
+        $stmt = $pdo->prepare($bezeroak);
+
         $stmt->execute([
+            ':iz' => $_POST["izena"],
+            ':ab' => $_POST["abizena"],
             ':em' => $_POST["email"],
-            ':pas' => $_POST["pasahitza"]
+            ':pas' => $_POST["pasahitza"],
+            ':tel' => $_POST["telefonoa"],
+            ':hel' => $_POST["helbidea"]
         ]);
 
-        if ($stmt->rowCount() != 0) { ?>
-            <script>
-                alert("Telefono edo email hori jada sartuta dago!");    
-            </script>
-            <?php
-            exit;
-        } else {
-            $bezeroak = "INSERT INTO bezeroak (id, izena, abizena, email, pasahitza, telefonoa, helbidea) VALUES (null, :iz, :ab, :em, :pas, :tel, :hel)";
-            $stmt = $pdo->prepare($bezeroak);
+        if ($stmt) {
+            // Sesioan gorde erabiltzailearen datuak
+            $_SESSION['id'] = $bezeroa['id'];
+            $_SESSION['izena'] = $bezeroa['izena'];
 
-            $stmt->execute([
-                ':iz' => $_POST["izena"],
-                ':ab' => $_POST["abizena"],
-                ':em' => $_POST["email"],
-                ':pas' => $_POST["pasahitza"],
-                ':tel' => $_POST["telefonoa"],
-                ':hel' => $_POST["helbidea"]
-            ]);
-
-            if ($stmt) {
-                // Saioan gorde
-                $_SESSION['id'] = $bezeroa['id'];
-                $_SESSION['izena'] = $bezeroa['izena'];
-
-                header("Location: sarrera.php?ok=1");
-                exit();
-            }
+            // Sarrera orrira bidali eta alert bat erakutsi
+            header("Location: sarrera.php?ok=1");
+            exit();
         }
-        
     }
-    ?>
-    <?php if (isset($_GET['ok'])): ?>
-        <script src="https://code.jquery.com/jquery-4.0.0.js"
-            integrity="sha256-9fsHeVnKBvqh3FB2HYu7g2xseAZ5MlN6Kz/qnkASV8U=" crossorigin="anonymous"></script>
-        <script>
-            alert("Erregistratu zara!");
-        </script>
-    <?php endif; ?>
+}
+?>
+
+<?php if (isset($_GET['ok'])): ?>
+    <!-- jQuery eta alert bat erregistratu ondoren -->
+    <script src="https://code.jquery.com/jquery-4.0.0.js"
+        integrity="sha256-9fsHeVnKBvqh3FB2HYu7g2xseAZ5MlN6Kz/qnkASV8U=" crossorigin="anonymous"></script>
+    <script>
+        alert("Erregistratu zara!");
+    </script>
+<?php endif; ?>
