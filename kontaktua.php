@@ -94,7 +94,6 @@ if (isset($_POST['bidali'])) {
 <script src="https://code.jquery.com/jquery-4.0.0.js" integrity="sha256-9fsHeVnKBvqh3FB2HYu7g2xseAZ5MlN6Kz/qnkASV8U=" crossorigin="anonymous"></script>
 <script>
 var emailOkerra = <?= $emailOkerra ? 'true' : 'false'; ?>;
-console.log(emailOkerra)
 if (emailOkerra === true) {
     // Formularioa ezkutatu eta mezua erakutsi
     $(".mensajea").css("display","block" );
