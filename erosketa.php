@@ -21,12 +21,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['erosi'])) {
     $stmt = $pdo->prepare("INSERT INTO salmentak (id) VALUES (NULL)");
     $stmt->execute();
 
-    // Sortu berri den salmentaren ID-a hartu eta
-    // bezeroaren saskiko elementuei esleitu (salmenta_id hutsik dutenak)
-    $stmt = $pdo->prepare("UPDATE saskiak SET salmenta_id = :salmenta_id WHERE bezeroa_id = :bezero_id AND salmenta_id IS NULL");
+        // Erabiliko dugun salmenta ID-a aldagai batean gorde (ez deitu lastInsertId() berriro)
+        $salmentaId = $pdo->lastInsertId();
+
+        // bezeroaren saskiko elementuei esleitu (salmenta_id hutsik dutenak)
+        $stmt = $pdo->prepare("UPDATE saskiak SET salmenta_id = :salmenta_id WHERE bezeroa_id = :bezero_id AND salmenta_id IS NULL");
+        $stmt->execute([
+            ':salmenta_id' => $salmentaId,
+            ':bezero_id' => $bezero_id
+        ]);
+
+        // Produktuetan stock-a eguneratu, saskian dagoen kantitatearekin
+        $stmt = $pdo->prepare("UPDATE produktuak p
+            INNER JOIN saskiak s ON s.produktua_id = p.id
+            SET p.stock = p.stock - s.kantitatea
+            WHERE s.bezeroa_id = :bezero_id AND s.salmenta_id = :salmenta_id");
+
     $stmt->execute([
-        ':salmenta_id' => $pdo->lastInsertId(),
-        ':bezero_id' => $bezero_id
+        ':bezero_id' => $bezero_id,
+        ':salmenta_id' => $salmentaId
     ]);
 
     // Erosketa orrira birbideratu
